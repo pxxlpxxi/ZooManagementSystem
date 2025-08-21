@@ -8,12 +8,11 @@ namespace ZooManagementSystem
 {
     enum LionSounds
     {
-        Roarrrrr,
+        Roar,
         Growl,
         Mewl,
         Snarl,
         Grrrrr,
-        Raaaawr,
         Chuff,
         Hiss,
         Grumble,
@@ -38,6 +37,11 @@ namespace ZooManagementSystem
         {
             return Sound.ToString();
         }
+        public override string GetRandomSound2()
+        {
+            return GetRandomEnumValueAsString(typeof(LionSounds));
+        }
+
         //public override string GetRandomSound()
         //{
         //    Array sounds = Enum.GetValues(typeof(LionSounds));
@@ -46,10 +50,6 @@ namespace ZooManagementSystem
         //    return randomSound.ToString();
 
         //}
-        public override string GetRandomSound2()
-        {
-            return GetRandomEnumValueAsString(typeof(LionSounds));
-        }
         //public override string GetRandomSound() {
         //    return GetRandomEnumValue<LionSounds>().ToString();
         //}

@@ -36,7 +36,7 @@ namespace ZooManagementSystem
 
         public virtual void MakeSound()
         {
-            string sound = $"{Name}, the {Species} says: {GetSound()}";
+            string sound = $"{Name} the {Species} says: {GetSound()}";
             Console.WriteLine(sound);
         }
         public abstract string GetSound();

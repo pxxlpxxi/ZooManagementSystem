@@ -9,7 +9,7 @@ namespace ZooManagementSystem
     enum PenguinSounds
     {
         Honk,
-        Bray,       // Ligner et æsel, meget karakteristisk
+        Bray,
         Squawk,
         oOoOOOoOo,
         Whistle,
@@ -22,7 +22,7 @@ namespace ZooManagementSystem
     }
     internal class Penguin : Animal
     {
-        private string _sound = "NootNoot";
+        private string _sound = "NootNoOoOOoot";
         private string _name;
 
         public string Sound { get { return _sound; } set { _sound = value; } }
@@ -32,14 +32,9 @@ namespace ZooManagementSystem
         {
 
         }
-        //public override string GetRandomSound()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
         public override string GetSound()
         {
-            throw new NotImplementedException();
+            return Sound.ToString();
         }
         public override string GetRandomSound2()
         {

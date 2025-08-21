@@ -21,7 +21,7 @@ namespace ZooManagementSystem
     }
     internal class Elephant : Animal
     {
-        private string _sound = "Snort";
+        private string _sound = "Toooooot";
         private string _name;
 
         public string Sound { get { return _sound; } set { _sound = value; } }
@@ -31,19 +31,17 @@ namespace ZooManagementSystem
         {
 
         }
-        //public override string GetRandomSound()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
         public override string GetSound()
         {
-            throw new NotImplementedException();
+            return Sound.ToString();
         }
-
         public override string GetRandomSound2()
         {
             return GetRandomEnumValueAsString(typeof(ElephantSounds));
         }
+        //public override string GetRandomSound()
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }
