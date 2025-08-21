@@ -1,4 +1,6 @@
-﻿namespace ZooManagementSystem
+﻿using System.Security.Permissions;
+
+namespace ZooManagementSystem
 {
     internal class Program
     {
@@ -89,6 +91,16 @@
             elephantEnclosure.ListAnimals();
             penguinEnclosure.ListAnimals();
             giraffeEnclosure.ListAnimals();
+
+            Console.WriteLine(seperator);
+
+            //test zookeper
+            Console.WriteLine("Tester Zookeeper, feed, clean:");
+            Zookeeper rafiki = new("Rafiki", 38, lionEnclosure);
+            rafiki.FeedAnimals(); Console.WriteLine();
+            rafiki.CleanEnclosure();
+
+            Console.WriteLine(seperator);
 
 
 
