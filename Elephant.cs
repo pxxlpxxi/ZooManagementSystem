@@ -35,7 +35,7 @@ namespace ZooManagementSystem
         {
             return Sound.ToString();
         }
-        public override string GetRandomSound2()
+        public override string GetRandomSound()
         {
             return GetRandomEnumValueAsString(typeof(ElephantSounds));
         }

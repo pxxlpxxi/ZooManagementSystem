@@ -5,10 +5,13 @@
         static void Main(string[] args)
         {
             string seperator = new string('═', 40);
-            Console.WriteLine("Tester MakeSound() og MakeRandomSound()x4:\n");
-            //lion make sounds test
+
+            Console.WriteLine("Tester MakeSound() og MakeRandomSound()x5:\n");
+            //instansiering, lion make sounds test
             Lion mufasa = new("Mufasa", new DateTime(1994, 06, 15));
-            mufasa.MakeSound();
+
+            mufasa.MakeSound(); Console.WriteLine();
+
             for (int i = 0; i < 5; i++)
             {
                 mufasa.MakeRandomSound();
@@ -16,32 +19,56 @@
             }
             Console.WriteLine(seperator);
 
-            //elephant make sounds test
+            //instansiering, elephant make sounds test
             Elephant dumbo = new("Dumbo", new DateTime(1941, 10, 23));
-            dumbo.MakeSound();
+
+            dumbo.MakeSound(); Console.WriteLine();
+
             for (int i = 0; i < 5; i++)
             {
                 dumbo.MakeRandomSound();
             }
             Console.WriteLine(seperator);
 
-            //penguin make sounds test
+            //instansiering, penguin make sounds test
             Penguin pinga = new("Pinga", new DateTime(1986, 03, 28));
-            pinga.MakeSound();
+
+            pinga.MakeSound(); Console.WriteLine();
+
             for (int i = 0; i < 5; i++)
             {
                 pinga.MakeRandomSound();
             }
             Console.WriteLine(seperator);
 
-            //giraffe makesounds test
+            //instansiering, giraffe makesounds test
             Giraffe melman = new("Melman", new DateTime(2005, 05, 27));
-            melman.MakeSound();
-            for (int i = 0; i < 5; i++) {
+
+            melman.MakeSound(); Console.WriteLine();
+
+            for (int i = 0; i < 5; i++)
+            {
                 melman.MakeRandomSound();
             }
             Console.WriteLine(seperator);
 
+            //sleep, eat test
+            Console.WriteLine("Tester Sleep() og Eat():\n");
+            Console.WriteLine(mufasa.Eat() + "\n" + "\n" + mufasa.Sleep() + "\n");
+            Console.WriteLine(dumbo.Eat() + "\n" + "\n" + dumbo.Sleep() + "\n");
+            Console.WriteLine(pinga.Eat() + "\n" + "\n" + pinga.Sleep() + "\n");
+            Console.WriteLine(melman.Eat() + "\n" + "\n" + melman.Sleep() + "\n");
+
+            Console.WriteLine(seperator);
+
+            //age test
+            Console.WriteLine("Tester Age(), GetAge()\n");
+            mufasa.Age(); Console.WriteLine();
+            dumbo.Age(); Console.WriteLine();
+            pinga.Age(); Console.WriteLine();
+            melman.Age(); Console.WriteLine();
+
+            Console.WriteLine(seperator);
         }
     }
 }

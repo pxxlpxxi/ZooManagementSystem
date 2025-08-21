@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ZooManagementSystem
 {
@@ -43,7 +45,7 @@ namespace ZooManagementSystem
       
         public virtual void MakeRandomSound()
         {
-            string randomSound = $"{Name} the {Species} says: {GetRandomSound2().ToString()}";
+            string randomSound = $"{Name} the {Species} says: {GetRandomSound().ToString()}";
 
             Console.WriteLine(randomSound);
         }
@@ -54,7 +56,25 @@ namespace ZooManagementSystem
             return values.GetValue(index).ToString();
         }
         //public abstract string GetRandomSound();
-        public abstract string GetRandomSound2();
+        public abstract string GetRandomSound();
+        public virtual string Eat() { 
+            return $"{Name} is eating.";
+        }
+        public virtual string Sleep() {
+            return $"Schhh, the {Species} is sleeping." +
+                $"\n{Name} says: ZzzZZzZzzzz .... zzZzZzzzZzz ...";
+        }
+        public virtual void Age() {
+            Console.WriteLine($"{Name} is {GetAge().age} years old.\nThe {Species} was born on {GetAge().born}.");
+        }
+        public virtual (int age, string born) GetAge() 
+        {
+            DateTime today = DateTime.Now;
+            int age = today.Year - Birthdate.Year;
+
+            string bday = Birthdate.ToString("MMMM dd yyyy", new CultureInfo("en-US"));
+            return (age, bday);
+        }
 
         //public string GetRandomEnumValue<T>() where T : Enum
         //{
