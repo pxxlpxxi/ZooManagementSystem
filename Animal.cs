@@ -17,6 +17,8 @@ namespace ZooManagementSystem
         // private static Random _random = new Random();
         protected static Random random = new Random(); //arves af subklasser, underscore?
 
+        public abstract int RequiredArea { get; } //m²-krav pr dyr til Enclosure
+
 
         public string Name { get { return _name; } set { _name = value; } }
         public string Species { get { return _species; } set { _species = value; } }

@@ -25,6 +25,7 @@ namespace ZooManagementSystem
         public string Sound { get { return _sound; } set { _sound = value; } }
         public string Name { get { return _name; } set { _name = value; } }
 
+        public override int RequiredArea => 250;  //250 m² arealkrav pr giraf i Enclosure
         public Giraffe(string name, DateTime birthdate) : base(name, species: "Giraffe", birthdate)
         {
 

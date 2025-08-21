@@ -27,6 +27,7 @@ namespace ZooManagementSystem
 
         public string Sound { get { return _sound; } set { _sound = value; } }
         public string Name { get { return _name; } set { _name = value; } }
+        public override int RequiredArea => 30; //30 m²
 
         public Penguin(string name, DateTime birthdate) : base(name, species: "Penguin", birthdate)
         {

@@ -69,6 +69,29 @@
             melman.Age(); Console.WriteLine();
 
             Console.WriteLine(seperator);
+
+            //test enclosure 
+            Console.WriteLine("tester Enclosure Add(), ListAnimals():");
+
+            Enclosure lionEnclosure = new("Lion's Lair");
+            lionEnclosure.Animals.Add(mufasa);
+
+            Enclosure elephantEnclosure = new("Elephant Enclave");
+            elephantEnclosure.Animals.Add(dumbo);
+            
+            Enclosure penguinEnclosure = new("Penguin's Pond");
+            penguinEnclosure.Animals.Add(pinga);
+
+            Enclosure giraffeEnclosure = new("Gentle Giants’ Garden");
+            giraffeEnclosure.Animals.Add(melman);
+
+            lionEnclosure.ListAnimals();
+            elephantEnclosure.ListAnimals();
+            penguinEnclosure.ListAnimals();
+            giraffeEnclosure.ListAnimals();
+
+
+
         }
     }
 }
