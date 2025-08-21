@@ -25,17 +25,13 @@ namespace ZooManagementSystem
             _age = age;
             _assignedEnclosure = assignedEnclosure;
         }
-        /*Attributter:
-
-
-Metoder:
-
-        */
-        public void FeedAnimals() {
+        public void FeedAnimals()
+        {
             string feeding = $"Zookeeper {Name} is feeding the animals in the {AssignedEnclosure.Name}.";
             Console.WriteLine(feeding);
         }
-        public void CleanEnclosure() {
+        public void CleanEnclosure()
+        {
             string cleaning = $"{AssignedEnclosure.Name} is being cleaned by Zookeeper {Name}.";
             Console.WriteLine(cleaning);
         }

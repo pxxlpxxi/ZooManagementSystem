@@ -103,6 +103,16 @@ namespace ZooManagementSystem
             Console.WriteLine(seperator);
 
 
+            //test zoo, add enclosure, list all animals
+            Console.WriteLine("Tester Zoo AddEnclosure, ListAllAnimals:");
+            Zoo zoo = new();
+            zoo.AddEnclosure(lionEnclosure);
+            zoo.AddEnclosure(elephantEnclosure);
+            zoo.AddEnclosure(penguinEnclosure);
+            zoo.AddEnclosure(giraffeEnclosure);
+
+            zoo.ListAllAnimals();
+
 
         }
     }
