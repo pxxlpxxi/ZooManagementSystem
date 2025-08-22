@@ -61,6 +61,8 @@ animals (list): Liste af dyr i buret*/
         }
         public void ListAnimals()
         {
+            Console.WriteLine($"\nAnimals in {Name}:");
+
             _animals.ForEach(animal =>
             {
                 Console.WriteLine(animal.Name);

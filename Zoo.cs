@@ -14,7 +14,7 @@ namespace ZooManagementSystem
         name (str): Navnet på zooen
 
         enclosures (list): Liste over alle bure i zooen*/
-        private string _name = "Critter Kingdom - Roars & S'mores";
+        private string _name = "Critter Kingdom"; // - Roars & S'mores
         private List<Enclosure> _enclosures;
         public string Name { get { return _name; } set { _name = value; } }
         public List<Enclosure> Enclosures => _enclosures;
@@ -34,10 +34,11 @@ namespace ZooManagementSystem
         }
         public void ListAllAnimals()
         {
+            Console.WriteLine($"\nAnimals in {Name}:");
+
             foreach (var enclosure in _enclosures)
             {
-                Console.WriteLine($"Animals in {enclosure.Name}:");
-                foreach (var animal in enclosure.Animals)
+                foreach (var animal in enclosure.Animals) //foreach animal in each enclosure
                 {
                     Console.WriteLine(animal.Name);
                 }

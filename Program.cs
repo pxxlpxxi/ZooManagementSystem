@@ -10,7 +10,12 @@ namespace ZooManagementSystem
 
             Console.WriteLine("Tester MakeSound() og MakeRandomSound()x5:\n");
             //instansiering, lion make sounds test
-            Lion mufasa = new("Mufasa", new DateTime(1994, 06, 15));
+            Lion mufasa = new("Mufasa", new DateTime(1974, 04, 05));
+            Lion simba = new("Simba", new DateTime(1994,06,15));
+            Lion scar = new("Scar", new DateTime(1974,10,31));
+            Lion kovu = new("Kovu", new DateTime(1994, 08, 17));
+            Lion nala = new("Nala", new DateTime(1994,05, 05));
+
 
             mufasa.MakeSound(); Console.WriteLine();
 
@@ -33,7 +38,8 @@ namespace ZooManagementSystem
             Console.WriteLine(seperator);
 
             //instansiering, penguin make sounds test
-            Penguin pinga = new("Pinga", new DateTime(1986, 03, 28));
+            Penguin pinga = new("Pinga", new DateTime(1990, 10, 06));
+            Penguin pingu = new("Pingu", new DateTime(1986, 03, 28));
 
             pinga.MakeSound(); Console.WriteLine();
 
@@ -73,24 +79,33 @@ namespace ZooManagementSystem
             Console.WriteLine(seperator);
 
             //test enclosure 
-            Console.WriteLine("tester Enclosure Add(), ListAnimals():");
+            Console.WriteLine("tester Enclosure Add(), ListAnimals():\n");
 
             Enclosure lionEnclosure = new("Lion's Lair");
             lionEnclosure.Animals.Add(mufasa);
+            lionEnclosure.Animals.Add(scar);
+            lionEnclosure.Animals.Add(simba);
+            lionEnclosure.Animals.Add(nala);
+            lionEnclosure.Animals.Add(kovu);
 
             Enclosure elephantEnclosure = new("Elephant Enclave");
             elephantEnclosure.Animals.Add(dumbo);
             
             Enclosure penguinEnclosure = new("Penguin's Pond");
             penguinEnclosure.Animals.Add(pinga);
+            penguinEnclosure.Animals.Add(pingu);
 
             Enclosure giraffeEnclosure = new("Gentle Giants’ Garden");
             giraffeEnclosure.Animals.Add(melman);
 
             lionEnclosure.ListAnimals();
+            
             elephantEnclosure.ListAnimals();
+            
             penguinEnclosure.ListAnimals();
+
             giraffeEnclosure.ListAnimals();
+            Console.WriteLine("\n");
 
             Console.WriteLine(seperator);
 
