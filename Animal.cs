@@ -44,7 +44,7 @@ namespace ZooManagementSystem
             Console.WriteLine(sound);
         }
         public abstract string GetSound();
-      
+
         public virtual void MakeRandomSound()
         {
             string randomSound = $"{Name} the {Species} says: {GetRandomSound().ToString()}";
@@ -59,20 +59,31 @@ namespace ZooManagementSystem
         }
         //public abstract string GetRandomSound();
         public abstract string GetRandomSound();
-        public virtual string Eat() { 
+        public virtual string Eat()
+        {
             return $"{Name} is eating.";
         }
-        public virtual string Sleep() {
+        public virtual string Sleep()
+        {
             return $"Schhh, the {Species} is sleeping." +
                 $"\n{Name} says: ZzzZZzZzzzz .... zzZzZzzzZzz ...";
         }
-        public virtual void Age() {
+        public virtual void Age()
+        {
             Console.WriteLine($"{Name} is {GetAge().age} years old.\nThe {Species} was born on {GetAge().born}.");
         }
-        public virtual (int age, string born) GetAge() 
+        public virtual (int age, string born) GetAge()
         {
             DateTime today = DateTime.Now;
             int age = today.Year - Birthdate.Year;
+
+            //if value of today is smaller than birthdate+age
+            //aka. if thís years birthdate hasnt happened yet
+            if (today < _birthdate.AddYears(age))
+            {
+                //subtract one year from age
+                age--;
+            }
 
             string bday = Birthdate.ToString("MMMM dd yyyy", new CultureInfo("en-US"));
             return (age, bday);

@@ -113,7 +113,11 @@ namespace ZooManagementSystem
 
             zoo.ListAllAnimals();
 
-
+            Class1 person = new();
+            int age= person.GetAge().age;
+            string bday= person.GetAge().bday;
+            Console.WriteLine(age);
+            Console.WriteLine(bday);
         }
     }
 }
