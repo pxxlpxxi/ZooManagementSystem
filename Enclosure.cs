@@ -17,12 +17,11 @@ size (int): Størrelsen på buret (m²)
 animals (list): Liste af dyr i buret*/
         private string _name;
         private int _size;
-        private const int _sizePerLion = 300; // 300 m² pr løve
+        //private const int _sizePerLion = 300; // 300 m² pr løve
         private List<Animal> _animals = new();
-
         public string Name { get { return _name; } set { _name = value; } }
         public int Size { get { return _size; } set { _size = value; } }
-        public List<Animal> Animals => _animals;
+        public List<Animal> Animals => _animals; //shortform getter: kun læsbar udenfor klassen
 
         /// <summary>
         /// Constructor for Enclosure, takes one parameter

@@ -6,16 +6,19 @@ namespace ZooManagementSystem
     {
         static void Main(string[] args)
         {
+            TxtDB db = new TxtDB();
+
             string seperator = new string('═', 40);
 
             Console.WriteLine("Tester MakeSound() og MakeRandomSound()x5:\n");
             //instansiering, lion make sounds test
             Lion mufasa = new("Mufasa", new DateTime(1974, 04, 05));
-            Lion simba = new("Simba", new DateTime(1994,06,15));
-            Lion scar = new("Scar", new DateTime(1974,10,31));
+            Lion simba = new("Simba", new DateTime(1994, 06, 15));
+            Lion scar = new("Scar", new DateTime(1974, 10, 31));
             Lion kovu = new("Kovu", new DateTime(1994, 08, 17));
-            Lion nala = new("Nala", new DateTime(1994,05, 05));
+            Lion nala = new("Nala", new DateTime(1994, 05, 05));
 
+            db.AddAnimal(mufasa);
 
             mufasa.MakeSound(); Console.WriteLine();
 
@@ -27,9 +30,10 @@ namespace ZooManagementSystem
             Console.WriteLine(seperator);
 
             //instansiering, elephant make sounds test
-            Elephant dumbo = new("Dumbo", new DateTime(1941, 10, 23));
-
-            dumbo.MakeSound(); Console.WriteLine();
+            Animal dumbo = new Elephant("Dumbo", new DateTime(1941, 10, 23));
+            //Polymorfi: dumbo instansieret som Animal, hvor metode kaldes. (Animal.MakeSound()).
+            //Præcis type (Elephant) afgøres først, når program kører.
+            dumbo.MakeSound();
 
             for (int i = 0; i < 5; i++)
             {
@@ -90,7 +94,7 @@ namespace ZooManagementSystem
 
             Enclosure elephantEnclosure = new("Elephant Enclave");
             elephantEnclosure.Animals.Add(dumbo);
-            
+
             Enclosure penguinEnclosure = new("Penguin's Pond");
             penguinEnclosure.Animals.Add(pinga);
             penguinEnclosure.Animals.Add(pingu);
@@ -99,9 +103,9 @@ namespace ZooManagementSystem
             giraffeEnclosure.Animals.Add(melman);
 
             lionEnclosure.ListAnimals();
-            
+
             elephantEnclosure.ListAnimals();
-            
+
             penguinEnclosure.ListAnimals();
 
             giraffeEnclosure.ListAnimals();
@@ -112,8 +116,18 @@ namespace ZooManagementSystem
             //test zookeper
             Console.WriteLine("Tester Zookeeper, feed, clean:");
             Zookeeper rafiki = new("Rafiki", 38, lionEnclosure);
+            Zookeeper willow = new("Grandmother Willow", 86, giraffeEnclosure);
+            Zookeeper roquefort = new("Roquefort", 19, penguinEnclosure);
+            Zookeeper bom = new("BomBom", 3, elephantEnclosure);
+
             rafiki.FeedAnimals(); Console.WriteLine();
-            rafiki.CleanEnclosure();
+            rafiki.CleanEnclosure(); Console.WriteLine();
+            willow.FeedAnimals(); Console.WriteLine();
+            willow.CleanEnclosure(); Console.WriteLine();
+            roquefort.FeedAnimals(); Console.WriteLine();
+            roquefort.CleanEnclosure(); Console.WriteLine();
+            bom.FeedAnimals(); Console.WriteLine();
+            bom.CleanEnclosure(); Console.WriteLine();
 
             Console.WriteLine(seperator);
 
@@ -128,7 +142,13 @@ namespace ZooManagementSystem
 
             zoo.ListAllAnimals();
 
-            
+
+            Console.WriteLine("Dbtest: ");
+            db.AddAnimal(mufasa);
+            List<Animal> fromDb= db.GetAllAnimals();
+            fromDb.ForEach(ani => { Console.WriteLine(ani.Name + ani.Species + ani.Birthdate); ani.Age(); });
+
+
         }
     }
 }

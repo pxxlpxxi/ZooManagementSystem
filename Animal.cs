@@ -24,6 +24,7 @@ namespace ZooManagementSystem
         public string Species { get { return _species; } set { _species = value; } }
         public DateTime Birthdate { get { return _birthdate; } set { _birthdate = value; } }
 
+        public Animal() { }
 
         public Animal(string name, string species, DateTime birthdate)
         {
@@ -32,7 +33,7 @@ namespace ZooManagementSystem
             _birthdate = birthdate;
         }
 
-        protected Animal(string name, string species)
+        public Animal(string name, string species)
         {
             Name = name;
             Species = species;
@@ -78,7 +79,7 @@ namespace ZooManagementSystem
             int age = today.Year - Birthdate.Year;
 
             //if value of today is smaller than birthdate+age
-            //aka. if thís years birthdate hasnt happened yet
+            //aka. if thís years birthdate hasnt passed yet
             if (today < _birthdate.AddYears(age))
             {
                 //subtract one year from age
@@ -87,6 +88,11 @@ namespace ZooManagementSystem
 
             string bday = Birthdate.ToString("MMMM dd yyyy", new CultureInfo("en-US"));
             return (age, bday);
+        }
+        public override bool Equals(object obj)
+        {
+            Animal a = obj as Animal;
+            return a.Name == this.Name && a.Species == this.Species && a.Birthdate.Equals(this.Birthdate);
         }
 
         //public string GetRandomEnumValue<T>() where T : Enum
