@@ -12,11 +12,14 @@ namespace ZooManagementSystem
         private string _name;
         private int _age;
         private Enclosure _assignedEnclosure;
-
+        private readonly string _enclosureName;
         //properties
         public string Name { get { return _name; } set { _name = value; } }
         public int Age { get { return _age; } set { _age = value; } }
         public Enclosure AssignedEnclosure { get { return _assignedEnclosure; } set { _assignedEnclosure = value; } }
+
+        //AssignedEnclosure.Name;
+        public string EnclosureName => _enclosureName;
 
         //constructor
         public Zookeeper(string name, int age, Enclosure assignedEnclosure)
@@ -24,7 +27,16 @@ namespace ZooManagementSystem
             _name = name;
             _age = age;
             _assignedEnclosure = assignedEnclosure;
+            _enclosureName = assignedEnclosure.Name;
         }
+        //constructor, hvis data læses fra fil
+        public Zookeeper(string name, int age, string enclosureName)
+        {
+            _name = name;
+            _age = age;
+            _enclosureName = enclosureName;
+        }
+
         public void FeedAnimals()
         {
             string feeding = $"Zookeeper {Name} is feeding the animals in the {AssignedEnclosure.Name}.";
