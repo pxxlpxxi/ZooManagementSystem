@@ -22,7 +22,7 @@ namespace ZooManagementSystem
         private List<Animal> _animals;
         private List<Visitor> _visitors;
 
-
+        //properties: shortform getters
         public List<Zookeeper> Zookeepers => _zookeepers;
         public List<Enclosure> Enclosures => _enclosures;
         public List<Animal> Animals => _animals;
@@ -31,13 +31,17 @@ namespace ZooManagementSystem
         //dictionary for mapping types/classes and subclasses to function(takes string, returns object)
         private readonly Dictionary<string, Func<string[], object>> _factoryDictionary;
 
+        //dictionary for mapping comparison of two objects
+        private readonly Dictionary<string, Func<object, bool>> _duplicateCheckers;
+
+
         /// <summary>
         /// constructor, initialiserer ny instans af klassen. <br></br>
         /// sætter _factoryDictionary op, mapper typer til constructors 
         /// </summary>
         public DatabaseTxt()
         {
-            //keystring specifying which class' constructor to insert data into
+            //keystring specifying into which class' constructor to insert data
             _factoryDictionary = new Dictionary<string, Func<string[], object>>()
             {
                 { "Zookeeper", fields => new Zookeeper(fields[1], int.Parse(fields[2]), fields[3]) },
@@ -47,6 +51,14 @@ namespace ZooManagementSystem
                 { "Penguin", fields => new Penguin(fields[1], DateTime.Parse(fields[2])) },
                 { "Giraffe", fields => new Giraffe(fields[1], DateTime.Parse(fields[2])) },
                 { "Visitor", fields => new Visitor(fields[1]) }
+            };
+
+            _duplicateCheckers = new Dictionary<string, Func<object, bool>>
+            {
+                { "Animal", obj => _animals.Any(a => a.Equals(obj)) },
+                { "Zookeeper", obj => _zookeepers.Any(z => z.Equals(obj)) },
+                { "Visitor", obj => _visitors.Any(v => v.Equals(obj)) },
+                { "Enclosure", obj => _enclosures.Any(e => e.Equals(obj)) }
             };
         }
         public void Create()
@@ -100,54 +112,27 @@ namespace ZooManagementSystem
         /// Method to add an animals data to db-file
         /// </summary>
         /// <param name="newAnimal"></param>
-        //public void AddAnimal(Animal newAnimal)
-        //{
-        //    if (!File.Exists(_animalsFile))
-        //    {
-        //        CreateFiles();
-        //    }
-        //    if (!Duplicate("Animal",newAnimal))
-        //    {
-        //        string birthdate = newAnimal.Birthdate.ToLongDateString();
-        //        string newAnimalData = $"{newAnimal.Species}|{newAnimal.Name}|{birthdate}";
-        //        try
-        //        {
-        //            using (StreamWriter streamWriter = new(_animalsFile, true))
-        //            {
-        //                streamWriter.WriteLine(newAnimalData);
-        //            }
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            Console.WriteLine("An error occured: " + e.Message);
-        //        }
-        //    } //end of if not duplicate
-        //} //end of add anímal method
-        //public void AddZookeper(Zookeeper newZookeeper)
-        //{
-        //    if (!File.Exists(_zookeepersFile))
-        //    {
-        //        CreateFile(_zookeepersFile);
-        //    }
-        //    if (!Duplicate("Zookeeper", newZookeeper))
-        //    {
-        //        string age = newZookeeper.Age.ToString();
-        //        string newAnimalData = $"Zookeeper|{newZookeeper.Name}|{age}|{newZookeeper.EnclosureName}";
-        //        try
-        //        {
-        //            using (StreamWriter streamWriter = new(_animalsFile, true))
-        //            {
-        //                streamWriter.WriteLine(newAnimalData);
-        //            }
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            Console.WriteLine("An error occured: " + e.Message);
-        //        }
-        //    } //end of if not duplicate
-        //} //end of add anímal method
-        public void AddAnimal(Animal newAnimal)
+        public void AddAnimal/*(string name, string species, DateTime birthdate)*/(Animal newAnimal)
         {
+            //string[] fields = { species, name, birthdate.ToLongDateString() };
+            //string newAnimalString = $"{species}|{name}|{birthdate.ToLongDateString}";
+            //if (!Duplicate2(newAnimalString))
+            //{
+
+            //    using (StreamWriter streamWriter = new(_animalsFile))
+            //    {
+            //        Console.WriteLine(newAnimalString);
+            //    }
+            //    if (Duplicate2(newAnimalString))
+            //    {
+            //        CreateObjects(fields);
+            //        Console.WriteLine($"{name} the {species} has been added.");
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("Something went wrong. Please try again.");
+            //    }
+            //}
             AddToFile(
                 newAnimal,
                 _animalsFile,
@@ -155,15 +140,33 @@ namespace ZooManagementSystem
                 a => Duplicate("Animal", a)
             );
         }
-        public void AddZookeeper(Zookeeper newZookeeper)
+        public void AddZookeeper/*(string name, int age, string enclosureName)*/ (Zookeeper newZookeeper)
         {
+            //string title = "Zookeeper";
+            //string[] fields = { title, name, age.ToString(), enclosureName };
+            //string newZookeeperString = $"{title}|{name}|{age.ToString()}|{enclosureName}";
+            //if (!Duplicate2(newZookeeperString))
+            //{
+            //    using (StreamWriter streamWriter = new(_zookeepersFile))
+            //    { Console.WriteLine(newZookeeperString); }
+            //    if (Duplicate2(newZookeeperString))
+            //    {
+            //        CreateObjects(fields);
+            //        Console.WriteLine($"{title} {name} has been added.");
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("Something went wrong. Please try again.");
+            //    }
+
             AddToFile(
-                newZookeeper,
-                _zookeepersFile,
-                z => $"Zookeeper|{z.Name}|{z.Age}|{z.EnclosureName}",
-                z => Duplicate("Zookeeper", z)
-            );
+            newZookeeper,
+            _zookeepersFile,
+            z => $"Zookeeper|{z.Name}|{z.Age}|{z.EnclosureName}",
+            z => Duplicate("Zookeeper", z)
+        );
         }
+
         public void AddEnclosure(Enclosure enclosure)
         {
             string animals = "";
@@ -178,14 +181,15 @@ namespace ZooManagementSystem
                 e => Duplicate("Enclosure", e)
                 );
         }
-        public void AddVisitor(Visitor visitor) {
+        public void AddVisitor(Visitor visitor)
+        {
             AddToFile(
                 visitor,
                 _visitorsFile,
                 v => $"Visitor|{v.Name}",
                 v => Duplicate("Visitor", v)
                 );
-        
+
         }
 
         private void AddToFile<T>(T obj, string filePath, Func<T, string> objString, Func<T, bool> duplicateChecker)
@@ -215,58 +219,83 @@ namespace ZooManagementSystem
         /// </summary>
         /// <param name="newAnimal"></param>
         /// <returns></returns>
-        public bool Duplicate(string type, object obj)//Animal? newAnimal = null, Zookeeper? newZookeeper = null, Enclosure? newEnclosure = null, Visitor? newVisitor = null
+        private bool Duplicate2(string newLine)
         {
-            switch (type)
-            {
-                //case "Eleplant":
-                //case "Penguin":
-                //case "Giraffe":
-                //case "Lion":
-                case "Animal":
-                    foreach (Animal animal in _animals)
-                        if (animal.Equals(obj))
-                        {//if animal already exists in TxtDB
-                            return true;
-                        }
-                    break;
-                case "Zookeeper":
-                    foreach (Zookeeper zookeeper in _zookeepers)
-                        if (zookeeper.Equals(obj))
-                        {//if animal already exists in TxtDB
-                            return true;
-                        }
-                    break;
-                case "Visitor":
-                    foreach (Visitor visitor in _visitors)
-                        if (visitor.Equals(obj))
-                        {//if animal already exists in TxtDB
-                            return true;
-                        }
-                    break;
-                case "Enclosure":
-                    foreach (Enclosure enclosure in _enclosures)
-                        if (enclosure.Equals(obj))
-                        {//if animal already exists in TxtDB
-                            return true;
-                        }
-                    break;
-            }
+            string[] lines = ReadDataLines(_animalsFile);
 
-            //if (File.Exists(_animalsFile))
-            //{
-            //    List<Animal> animalsInDB = GetAllAnimals();
-            //    foreach (Animal animal in animalsInDB)
-            //    {
-            //        //calling bool override Equals method in Animal
-            //        if (animal.Equals(newAnimal))
-            //        {//if animal already exists in TxtDB
-            //            return true;
-            //        }
-            //    }
-            //}
+            foreach (string line in lines)
+            {
+                if (line == newLine)
+                {
+                    Console.WriteLine("Error: This animal already exists");
+                    return true;
+                }
+            }
             return false;
         }
+        public bool Duplicate(string type, object obj)
+        {
+            if (_duplicateCheckers.TryGetValue(type, out var checkFunc))
+            {
+                return checkFunc(obj);
+            }
+
+            Console.WriteLine($"Duplicate check not implemented for type '{type}'.");
+            return false;
+        }
+
+        //public bool Duplicate(string type, object obj)//Animal? newAnimal = null, Zookeeper? newZookeeper = null, Enclosure? newEnclosure = null, Visitor? newVisitor = null
+        //{
+        //    switch (type)
+        //    {
+        //        //case "Eleplant":
+        //        //case "Penguin":
+        //        //case "Giraffe":
+        //        //case "Lion":
+        //        case "Animal":
+        //            foreach (Animal animal in _animals)
+        //                if (animal.Equals(obj))
+        //                {//if animal already exists in TxtDB
+        //                    return true;
+        //                }
+        //            break;
+        //        case "Zookeeper":
+        //            foreach (Zookeeper zookeeper in _zookeepers)
+        //                if (zookeeper.Equals(obj))
+        //                {//if animal already exists in TxtDB
+        //                    return true;
+        //                }
+        //            break;
+        //        case "Visitor":
+        //            foreach (Visitor visitor in _visitors)
+        //                if (visitor.Equals(obj))
+        //                {//if animal already exists in TxtDB
+        //                    return true;
+        //                }
+        //            break;
+        //        case "Enclosure":
+        //            foreach (Enclosure enclosure in _enclosures)
+        //                if (enclosure.Equals(obj))
+        //                {//if animal already exists in TxtDB
+        //                    return true;
+        //                }
+        //            break;
+        //    }
+
+        //if (File.Exists(_animalsFile))
+        //{
+        //    List<Animal> animalsInDB = GetAllAnimals();
+        //    foreach (Animal animal in animalsInDB)
+        //    {
+        //        //calling bool override Equals method in Animal
+        //        if (animal.Equals(newAnimal))
+        //        {//if animal already exists in TxtDB
+        //            return true;
+        //        }
+        //    }
+        //}
+        //return false;
+        //}
 
         /// <summary>
         /// REQUIRES that enclosures are already initiated.
@@ -275,7 +304,7 @@ namespace ZooManagementSystem
         /// creates objects from DB-data and sets value of List-fields
         /// </summary>
         /// <param name="lines">Array of lines of text, each line representing an object, field-values separated by |.</param>
-        internal void CreateObjectsFromDB(string[] lines)
+        internal void CreateObjects(string[] lines)
         {
 
             //_zookeepers.Clear();
@@ -283,11 +312,11 @@ namespace ZooManagementSystem
             //_animals.Clear();
             //_visitors.Clear();
 
-            //local object lists
-            List<Zookeeper> zookeepers = new();
-            List<Enclosure> enclosures = new();
+            //create local object lists if fields not already set
             List<Animal> animals = new();
+            List<Enclosure> enclosures = new();
             List<Visitor> visitors = new();
+            List<Zookeeper> zookeepers = new();
 
             foreach (string line in lines)
             {
@@ -317,18 +346,23 @@ namespace ZooManagementSystem
                         default:
                             Console.WriteLine($"Error: Unknown object type in line: {line}");
                             break;
-                    }
+                    } //end of switch
                 }
                 else
                 {
                     Console.WriteLine($"Unknown type: {key} i linje: {line}");
                 }
             }
-            //set fields value from local lists
-            _zookeepers = zookeepers;
-            _enclosures = enclosures;
-            _animals = animals;
-            _visitors = visitors;
+            //if field list empty set field, else add new obj to field list, 
+            if (_zookeepers == null)
+            { _zookeepers = zookeepers; }
+            else
+            { _zookeepers.AddRange(zookeepers); }
+            if (_enclosures == null)
+            { _enclosures = enclosures; }
+            else
+            { _animals.AddRange(animals); }
+            if (_visitors == null) { _visitors.AddRange(visitors); }
 
             foreach (Zookeeper z in _zookeepers)
             {

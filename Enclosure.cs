@@ -67,6 +67,15 @@ animals (list): Liste af dyr i buret*/
                 Console.WriteLine(animal.Name);
             });
         }
+        public override bool Equals(object obj)
+        {
+            Enclosure e = obj as Enclosure;
+            return e.Name == this.Name;
+        }
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
 
     }
 }

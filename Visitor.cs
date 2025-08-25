@@ -15,5 +15,14 @@ namespace ZooManagementSystem
         {
             _name = name;
         }
+        public override bool Equals(object obj)
+        {
+            Visitor v = obj as Visitor;
+            return v.Name == this.Name;
+        }
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
     }
 }

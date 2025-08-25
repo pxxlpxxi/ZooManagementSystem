@@ -47,5 +47,14 @@ namespace ZooManagementSystem
             string cleaning = $"{AssignedEnclosure.Name} is being cleaned by Zookeeper {Name}.";
             Console.WriteLine(cleaning);
         }
+        public override bool Equals(object obj)
+        {
+            Zookeeper z = obj as Zookeeper;
+            return z.Name == this.Name && z.Age == this.Age && z.AssignedEnclosure.Equals(this.AssignedEnclosure);
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, Age, AssignedEnclosure);
+        }
     }
 }

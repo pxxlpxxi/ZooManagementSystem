@@ -94,6 +94,10 @@ namespace ZooManagementSystem
             Animal a = obj as Animal;
             return a.Name == this.Name && a.Species == this.Species && a.Birthdate.Equals(this.Birthdate);
         }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, Species, Birthdate);
+        }
 
         //public string GetRandomEnumValue<T>() where T : Enum
         //{
