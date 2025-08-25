@@ -10,7 +10,7 @@ namespace ZooManagementSystem
     {
         private readonly DatabaseTxt _database;
 
-        private readonly AnimalMenu _animalMenu=new();
+       // private readonly 
         private readonly EnclosureMenu _enclosureMenu=new();
         private readonly ZookeeperMenu _zookeeperMenu = new();
         private readonly ZooMenu _zooMenu = new();
@@ -27,6 +27,7 @@ namespace ZooManagementSystem
 
         public void Run()
         {
+            AnimalMenu _animalMenu = new(_database);
             string[] menuOptions = {
                     "[1] Manage Animals",
                     "[2] Manage Zookeepers",
@@ -34,6 +35,8 @@ namespace ZooManagementSystem
                     "[4] Manage Zoo" +
                     "[Q] Return to main menu",
                  };
+
+            ConsoleKey? key = null;
 
             bool running = true;
             while (running && !QuitManager.QuitRequested)
@@ -45,7 +48,9 @@ namespace ZooManagementSystem
                     Console.WriteLine(item);
                 }
                 Console.WriteLine("Selection: ");
-                ConsoleKey? key = QuitManager.WaitForKeyOrQuit();
+                
+               
+                key = QuitManager.WaitForKeyOrQuit();
 
                 switch (key)
                 {
@@ -55,15 +60,15 @@ namespace ZooManagementSystem
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
-                        _zookeeperMenu.Run();
+                        //_zookeeperMenu.Run();
                         break;
                     case ConsoleKey.D3:
                     case ConsoleKey.NumPad3:
-                        _enclosureMenu.Run();
+                        //_enclosureMenu.Run();
                         break;
                     case ConsoleKey.D4:
                     case ConsoleKey.NumPad4:
-                        _zooMenu.Run();
+                        //_zooMenu.Run();
                         break;
                     case ConsoleKey.Q:
                         running = false;

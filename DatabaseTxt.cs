@@ -60,6 +60,11 @@ namespace ZooManagementSystem
                 { "Visitor", obj => _visitors.Any(v => v.Equals(obj)) },
                 { "Enclosure", obj => _enclosures.Any(e => e.Equals(obj)) }
             };
+
+            _animals = new List<Animal>();
+            _zookeepers = new List<Zookeeper>();
+            _enclosures = new List<Enclosure>();
+            _visitors = new List<Visitor>();
         }
         public void Create()
         {
@@ -139,6 +144,15 @@ namespace ZooManagementSystem
                 a => $"{a.Species}|{a.Name}|{a.Birthdate.ToLongDateString()}",
                 a => Duplicate("Animal", a)
             );
+
+            if (!_animals.Any(a => a.Equals(newAnimal)))
+               { _animals.Add(newAnimal); }
+
+            if (Duplicate("Animal", newAnimal))
+            {
+                Console.WriteLine($"{newAnimal.Name} the {newAnimal.Species} has been added.");
+            }
+            else { Console.WriteLine($"Could not add {newAnimal} the {newAnimal.Species}. Please try again"); }
         }
         public void AddZookeeper/*(string name, int age, string enclosureName)*/ (Zookeeper newZookeeper)
         {
@@ -199,19 +213,24 @@ namespace ZooManagementSystem
                 CreateFile(filePath);
             }
 
-            if (!duplicateChecker(obj))
+            if (duplicateChecker(obj))
             {
-                string line = objString(obj);
-                try
-                {
-                    using StreamWriter streamWriter = new(filePath, true);
-                    streamWriter.WriteLine(line);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("An error occurred: " + e.Message);
-                }
+                Console.WriteLine("Duplicate found. Skipping Write for: " + obj);
+            
+                return;
             }
+
+            string line = objString(obj);
+            try
+            {
+                using StreamWriter streamWriter = new(filePath, true);
+                streamWriter.WriteLine(line);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occurred: " + e.Message);
+            }
+
         }
 
         /// <summary>
@@ -241,6 +260,7 @@ namespace ZooManagementSystem
             }
 
             Console.WriteLine($"Duplicate check not implemented for type '{type}'.");
+            
             return false;
         }
 
@@ -354,15 +374,10 @@ namespace ZooManagementSystem
                 }
             }
             //if field list empty set field, else add new obj to field list, 
-            if (_zookeepers == null)
-            { _zookeepers = zookeepers; }
-            else
-            { _zookeepers.AddRange(zookeepers); }
-            if (_enclosures == null)
-            { _enclosures = enclosures; }
-            else
-            { _animals.AddRange(animals); }
-            if (_visitors == null) { _visitors.AddRange(visitors); }
+            _animals.AddRange(animals);
+            _zookeepers.AddRange(zookeepers); 
+            _visitors.AddRange(visitors);
+            _enclosures.AddRange(enclosures); 
 
             foreach (Zookeeper z in _zookeepers)
             {

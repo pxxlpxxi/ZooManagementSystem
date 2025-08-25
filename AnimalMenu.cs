@@ -9,13 +9,14 @@ namespace ZooManagementSystem
     internal class AnimalMenu
     {
         private readonly DatabaseTxt _database;
-        public AnimalMenu(DatabaseTxt database) { 
-        _database = database;
+        public AnimalMenu(DatabaseTxt database)
+        {
+            _database = database;
         }
 
-        private void Run()
+        internal void Run()
         {
-
+            ConsoleKey? key=null;
             string[] menuOptions =
             {
 
@@ -33,12 +34,18 @@ namespace ZooManagementSystem
             while (running && !QuitManager.QuitRequested)
             {
                 Console.Clear();
+                while (Console.KeyAvailable)
+                {
+                    Console.ReadKey(true);
+                }
                 foreach (string option in menuOptions)
                 {
                     Console.WriteLine(option);
                 }
                 Console.WriteLine("Selection: ");
-                ConsoleKey? key = QuitManager.WaitForKeyOrQuit();
+
+                
+                key = QuitManager.WaitForKeyOrQuit();
 
                 switch (key)
                 {
@@ -58,6 +65,9 @@ namespace ZooManagementSystem
         }
         private void AddAnimal()
         {
+            ConsoleKey? key = null;
+
+            string species = "";
             string[] animalOptions =
                 {
                 "[1] Elephant",
@@ -66,47 +76,75 @@ namespace ZooManagementSystem
                 "[4] Penguin",
                 "",
                 "[R] Return to menu"
+
                 };
             bool running = true;
 
             while (running && !QuitManager.QuitRequested)
             {
+                Console.ReadKey();
+                Console.Clear();
                 Console.WriteLine("Which species of animal would you like to add?");
 
                 foreach (string option in animalOptions)
                 {
                     Console.WriteLine(option);
                 }
-                Console.WriteLine("Choose species: ");
-                ConsoleKey key = Console.ReadKey();
+                Console.Write("Choose species: ");
 
-                string species = "";
-                string prompt = $"Please enter information about the {species} you wish to add.";
+                key = QuitManager.WaitForKeyOrQuit();
+                
+
                 switch (key)
                 {
                     case ConsoleKey.D1:
                     case ConsoleKey.NumPad1:
                         species = "Elephant";
-                        Console.WriteLine(prompt);
-                        Console.WriteLine("Name: ");
-                        string name = Console.ReadLine();
-                        Console.WriteLine("              [YYYY, MM, DD]\n" +
-                            "Date of birth: ");
-                        string bday = Console.ReadLine();
-                        if (DateTime.TryParse(bday, out DateTime birthdate))
-                        {
-                            Elephant e =new(name, birthdate);
-                            //_database.AddAnimal(Elephant elephant = new(name, birthdate));
-                        }
+                        (string name, DateTime birthdate) values = AddAnimalPrompt(species);
+
+                        //string name = values.name;
+                        //DateTime birthdate = values.birthdate;
+
+                        Elephant e = new(values.name, values.birthdate);
+                        _database.AddAnimal(e);
+
+                        Console.WriteLine();
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
+                        species = "Giraffe";
+                        values = AddAnimalPrompt(species);
+                        
+                            //string name = AddAnimalPrompt(species).name;
+                            //DateTime birthdate = AddAnimalPrompt(species).birthdate;
+
+                            Giraffe g = new(values.name, values.birthdate);
+                            _database.AddAnimal(g);
+                        
                         break;
                     case ConsoleKey.D3:
                     case ConsoleKey.NumPad3:
+                        species = "Lion";
+                        values = AddAnimalPrompt(species);
+                        
+                            //string name = AddAnimalPrompt(species).name;
+                            //DateTime birthdate = AddAnimalPrompt(species).birthdate;
+
+                            Lion l = new(values.name, values.birthdate);
+                            _database.AddAnimal(l);
+                        
                         break;
                     case ConsoleKey.D4:
                     case ConsoleKey.NumPad4:
+                        species = "Penguin";
+                        values = AddAnimalPrompt(species);
+                        
+                            //string name = AddAnimalPrompt(species).name;
+                            //DateTime birthdate = AddAnimalPrompt(species).birthdate;
+
+                            Penguin p = new(values.name, values.birthdate);
+                            _database.AddAnimal(p);
+                        
                         break;
                     case ConsoleKey.R:
                         running = false;
@@ -116,7 +154,37 @@ namespace ZooManagementSystem
                         break;
                 }//end of switch case
 
+
             }
+        }
+        private (string name, DateTime birthdate) AddAnimalPrompt(string animalType)
+        {
+            string prompt = $"\nPlease enter information about the {animalType} you wish to add.";
+            bool valid = false;
+
+            Console.WriteLine(prompt);
+            Console.WriteLine("Name: ");
+            string name = Console.ReadLine();
+
+            while (!valid)
+            {
+                Console.WriteLine("              [YYYY, MM, DD]\n" +
+                    "Date of birth: ");
+
+                string bday = Console.ReadLine();
+                if (DateTime.TryParse(bday, out DateTime birthdate))
+                {
+                    
+                    return (name, birthdate);
+                    //valid = true;
+                }
+                else
+                {
+                    Console.WriteLine("Input invalid. Try again.");
+                }
+
+            }
+            return (name, DateTime.Now);
         }
     }
 }

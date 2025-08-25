@@ -6,7 +6,9 @@ namespace ZooManagementSystem
     {
         static void Main(string[] args)
         {
-            TxtDB db = new TxtDB();
+            DatabaseTxt DB = new DatabaseTxt();
+
+            //TxtDB db = new TxtDB();
 
             string seperator = new string('═', 40);
 
@@ -18,7 +20,7 @@ namespace ZooManagementSystem
             Lion kovu = new("Kovu", new DateTime(1994, 08, 17));
             Lion nala = new("Nala", new DateTime(1994, 05, 05));
 
-            db.AddAnimal(mufasa);
+            //db.AddAnimal(mufasa);
 
             mufasa.MakeSound(); Console.WriteLine();
 
@@ -134,7 +136,7 @@ namespace ZooManagementSystem
 
             //test zoo, add enclosure, list all animals
             Console.WriteLine("Tester Zoo AddEnclosure, ListAllAnimals:");
-            Zoo zoo = new();
+            Zoo zoo = new(DB);
             zoo.AddEnclosure(lionEnclosure);
             zoo.AddEnclosure(elephantEnclosure);
             zoo.AddEnclosure(penguinEnclosure);
@@ -143,11 +145,21 @@ namespace ZooManagementSystem
             zoo.ListAllAnimals();
 
 
-            Console.WriteLine("Dbtest: ");
-            db.AddAnimal(mufasa);
-            List<Animal> fromDb= db.GetAllAnimals();
-            fromDb.ForEach(ani => { Console.WriteLine(ani.Name + ani.Species + ani.Birthdate); ani.Age(); });
+            //Console.WriteLine("Dbtest: ");
+            //db.AddAnimal(mufasa);
+            //List<Animal> fromDb= db.GetAllAnimals();
+            //fromDb.ForEach(ani => { Console.WriteLine(ani.Name + ani.Species + ani.Birthdate); ani.Age(); });
 
+            
+            DB.Create();
+            zoo.AddAnimalsToDatabase();
+            DB.GetAllAnimals();
+            MainMenu mainMenu = new(DB);
+            bool running = true;
+            while (running && !QuitManager.QuitRequested) {
+                
+                mainMenu.Run();
+            }
 
         }
     }

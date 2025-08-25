@@ -9,25 +9,27 @@ namespace ZooManagementSystem
 {
     internal class MainMenu
     {
-        private readonly ManageZooMenu _manageZooMenu;
-        private readonly VisitorMenu _visitorMenu;
-        private static readonly DatabaseTxt _database;
-        ManageZooMenu ManageZooMenu = new(Database);
+        //private readonly VisitorMenu _visitorMenu;
+        private readonly DatabaseTxt _database;
+        ManageZooMenu _manageZooMenu;
         //private readonly Database =>_database;
 
-        MainMenu(ManageZooMenu manageZooMenu, VisitorMenu visitorMenu, DatabaseTxt database)
+
+        public MainMenu(/*ManageZooMenu manageZooMenu, /*VisitorMenu visitorMenu,*/ DatabaseTxt database)
         {
-            _manageZooMenu = manageZooMenu;
-            _visitorMenu = visitorMenu;
+            // _manageZooMenu = manageZooMenu;
+            //_visitorMenu = visitorMenu;
             _database = database;
+            _manageZooMenu = new ManageZooMenu(_database);
+
         }
         public void Run()
         {
             DatabaseTxt Database = _database;
             ManageZooMenu Manager = new(Database);
+            ConsoleKey? input = null;
 
-
-        string[] menuOptions = {
+            string[] menuOptions = {
                     "[1] Visit Zoo",
                     "[2] Manage Zoo",
                     //"[3] ",
@@ -44,14 +46,14 @@ namespace ZooManagementSystem
                     Console.WriteLine(option);
                 }
                 Console.WriteLine("Selection: ");
-                ConsoleKey? input = QuitManager.WaitForKeyOrQuit();
+                input = QuitManager.WaitForKeyOrQuit();
 
                 //switch case
                 switch (input)
                 {
                     case ConsoleKey.D1:
                     case ConsoleKey.NumPad1:
-                        _visitorMenu.Run();
+                        //_visitorMenu.Run();
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:

@@ -89,10 +89,20 @@ namespace ZooManagementSystem
             string bday = Birthdate.ToString("MMMM dd yyyy", new CultureInfo("en-US"));
             return (age, bday);
         }
+        //public override bool Equals(object obj)
+        //{
+
+        //    Animal a = obj as Animal;
+        //    return a.Name == this.Name && a.Species == this.Species && a.Birthdate.Equals(this.Birthdate);
+        //}
         public override bool Equals(object obj)
         {
-            Animal a = obj as Animal;
-            return a.Name == this.Name && a.Species == this.Species && a.Birthdate.Equals(this.Birthdate);
+            if (obj is not Animal other)
+                return false;
+
+            return Name == other.Name &&
+                   Species == other.Species &&
+                   Birthdate == other.Birthdate;
         }
         public override int GetHashCode()
         {
