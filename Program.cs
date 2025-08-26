@@ -7,6 +7,7 @@ namespace ZooManagementSystem
         static void Main(string[] args)
         {
             DatabaseTxt DB = new DatabaseTxt();
+            DataInit dataInit = new DataInit();
 
             //TxtDB db = new TxtDB();
 

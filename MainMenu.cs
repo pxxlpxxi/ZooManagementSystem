@@ -12,16 +12,17 @@ namespace ZooManagementSystem
         //private readonly VisitorMenu _visitorMenu;
         private readonly DatabaseTxt _database;
         ManageZooMenu _manageZooMenu;
+        //private readonly DataInit _dataInit;
         //private readonly Database =>_database;
 
 
-        public MainMenu(/*ManageZooMenu manageZooMenu, /*VisitorMenu visitorMenu,*/ DatabaseTxt database)
+        public MainMenu(/*ManageZooMenu manageZooMenu, /*VisitorMenu visitorMenu,*/ DatabaseTxt database) //DataInit dataInit)
         {
             // _manageZooMenu = manageZooMenu;
             //_visitorMenu = visitorMenu;
             _database = database;
             _manageZooMenu = new ManageZooMenu(_database);
-
+          //  _dataInit = dataInit;
         }
         public void Run()
         {

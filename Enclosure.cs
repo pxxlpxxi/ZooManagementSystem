@@ -21,7 +21,7 @@ animals (list): Liste af dyr i buret*/
         private List<Animal> _animals = new();
         public string Name { get { return _name; } set { _name = value; } }
         public int Size { get { return _size; } set { _size = value; } }
-        public List<Animal> Animals => _animals; //shortform getter: kun læsbar udenfor klassen
+        public List<Animal> Animals { get { return _animals; } set { _animals = value; } } //shortform getter: kun læsbar udenfor klassen
 
         /// <summary>
         /// Constructor for Enclosure, takes one parameter
