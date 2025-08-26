@@ -26,6 +26,7 @@ namespace ZooManagementSystem
         }
         public void Run()
         {
+            Console.ReadKey();
             DatabaseTxt Database = _database;
             ManageZooMenu Manager = new(Database);
             ConsoleKey? input = null;

@@ -151,10 +151,12 @@ namespace ZooManagementSystem
             //List<Animal> fromDb= db.GetAllAnimals();
             //fromDb.ForEach(ani => { Console.WriteLine(ani.Name + ani.Species + ani.Birthdate); ani.Age(); });
 
-            
-            DB.Create();
-            zoo.AddAnimalsToDatabase();
-            DB.GetAllAnimals();
+            Console.ReadKey();
+
+            //DB.Create();
+            //zoo.AddAnimalsToDatabase();
+            //DB.GetAllAnimals();
+            DB.Initializer();
             MainMenu mainMenu = new(DB);
             bool running = true;
             while (running && !QuitManager.QuitRequested) {
