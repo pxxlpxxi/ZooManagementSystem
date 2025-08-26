@@ -32,7 +32,7 @@ namespace ZooManagementSystem
                     "[1] Manage Animals",
                     "[2] Manage Zookeepers",
                     "[3] Manage Enclosures",
-                    "[4] Manage Zoo" +
+                    "[4] Manage Zoo",
                     "[Q] Return to main menu",
                  };
 

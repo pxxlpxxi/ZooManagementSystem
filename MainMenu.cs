@@ -20,7 +20,7 @@ namespace ZooManagementSystem
         {
             // _manageZooMenu = manageZooMenu;
             //_visitorMenu = visitorMenu;
-            _database = database;
+            _database = new();
             _manageZooMenu = new ManageZooMenu(_database);
           //  _dataInit = dataInit;
         }

@@ -16,7 +16,7 @@ namespace ZooManagementSystem
 
         internal void Run()
         {
-            ConsoleKey? key=null;
+            ConsoleKey? key = null;
             string[] menuOptions =
             {
 
@@ -31,20 +31,17 @@ namespace ZooManagementSystem
 
             bool running = true;
 
-            while (running && !QuitManager.QuitRequested)
+            do
             {
                 Console.Clear();
-                while (Console.KeyAvailable)
-                {
-                    Console.ReadKey(true);
-                }
+
                 foreach (string option in menuOptions)
                 {
                     Console.WriteLine(option);
                 }
                 Console.WriteLine("Selection: ");
 
-                
+
                 key = QuitManager.WaitForKeyOrQuit();
 
                 switch (key)
@@ -61,7 +58,8 @@ namespace ZooManagementSystem
                         break;
                 }//end of switch case
 
-            }//end of while
+            } while (running && !QuitManager.QuitRequested);
+            //end of while
         }
         private void AddAnimal()
         {
@@ -80,7 +78,6 @@ namespace ZooManagementSystem
 
             while (running && !QuitManager.QuitRequested)
             {
-                Console.ReadKey();
                 Console.Clear();
                 Console.WriteLine("Which species of animal would you like to add?");
 
@@ -91,7 +88,7 @@ namespace ZooManagementSystem
                 Console.Write("Choose species: ");
 
                 ConsoleKey key = Console.ReadKey().Key;
-                
+
 
                 switch (key)
                 {
@@ -99,10 +96,6 @@ namespace ZooManagementSystem
                     case ConsoleKey.NumPad1:
                         species = "Elephant";
                         (string name, DateTime birthdate) values = AddAnimalPrompt(species);
-
-                        //string name = values.name;
-                        //DateTime birthdate = values.birthdate;
-
                         Elephant e = new(values.name, values.birthdate);
                         _database.AddAnimal(e);
 
@@ -112,37 +105,25 @@ namespace ZooManagementSystem
                     case ConsoleKey.NumPad2:
                         species = "Giraffe";
                         values = AddAnimalPrompt(species);
-                        
-                            //string name = AddAnimalPrompt(species).name;
-                            //DateTime birthdate = AddAnimalPrompt(species).birthdate;
+                        Giraffe g = new(values.name, values.birthdate);
+                        _database.AddAnimal(g);
 
-                            Giraffe g = new(values.name, values.birthdate);
-                            _database.AddAnimal(g);
-                        
                         break;
                     case ConsoleKey.D3:
                     case ConsoleKey.NumPad3:
                         species = "Lion";
                         values = AddAnimalPrompt(species);
-                        
-                            //string name = AddAnimalPrompt(species).name;
-                            //DateTime birthdate = AddAnimalPrompt(species).birthdate;
+                        Lion l = new(values.name, values.birthdate);
+                        _database.AddAnimal(l);
 
-                            Lion l = new(values.name, values.birthdate);
-                            _database.AddAnimal(l);
-                        
                         break;
                     case ConsoleKey.D4:
                     case ConsoleKey.NumPad4:
                         species = "Penguin";
                         values = AddAnimalPrompt(species);
-                        
-                            //string name = AddAnimalPrompt(species).name;
-                            //DateTime birthdate = AddAnimalPrompt(species).birthdate;
+                        Penguin p = new(values.name, values.birthdate);
+                        _database.AddAnimal(p);
 
-                            Penguin p = new(values.name, values.birthdate);
-                            _database.AddAnimal(p);
-                        
                         break;
                     case ConsoleKey.R:
                         running = false;
@@ -172,7 +153,7 @@ namespace ZooManagementSystem
                 string bday = Console.ReadLine();
                 if (DateTime.TryParse(bday, out DateTime birthdate))
                 {
-                    
+
                     return (name, birthdate);
                     //valid = true;
                 }
