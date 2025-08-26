@@ -36,7 +36,6 @@ namespace ZooManagementSystem
                     "[Q] Return to main menu",
                  };
 
-            ConsoleKey? key = null;
 
             bool running = true;
             while (running && !QuitManager.QuitRequested)
@@ -48,9 +47,9 @@ namespace ZooManagementSystem
                     Console.WriteLine(item);
                 }
                 Console.WriteLine("Selection: ");
-                
-               
-                key = QuitManager.WaitForKeyOrQuit();
+
+
+                ConsoleKey key = Console.ReadKey().Key;
 
                 switch (key)
                 {
@@ -70,7 +69,11 @@ namespace ZooManagementSystem
                     case ConsoleKey.NumPad4:
                         //_zooMenu.Run();
                         break;
+                    case ConsoleKey.R:
+                        running = false;
+                        break;
                     case ConsoleKey.Q:
+                        QuitManager.RequestQuit();
                         running = false;
                         break;
                 }//switch end

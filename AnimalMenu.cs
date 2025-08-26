@@ -65,8 +65,6 @@ namespace ZooManagementSystem
         }
         private void AddAnimal()
         {
-            ConsoleKey? key = null;
-
             string species = "";
             string[] animalOptions =
                 {
@@ -92,7 +90,7 @@ namespace ZooManagementSystem
                 }
                 Console.Write("Choose species: ");
 
-                key = QuitManager.WaitForKeyOrQuit();
+                ConsoleKey key = Console.ReadKey().Key;
                 
 
                 switch (key)
@@ -163,12 +161,12 @@ namespace ZooManagementSystem
             bool valid = false;
 
             Console.WriteLine(prompt);
-            Console.WriteLine("Name: ");
+            Console.Write("Name: ");
             string name = Console.ReadLine();
 
             while (!valid)
             {
-                Console.WriteLine("              [YYYY, MM, DD]\n" +
+                Console.Write("              [YYYY, MM, DD]\n" +
                     "Date of birth: ");
 
                 string bday = Console.ReadLine();

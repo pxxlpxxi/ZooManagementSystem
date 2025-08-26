@@ -238,19 +238,21 @@ namespace ZooManagementSystem
         /// </summary>
         /// <param name="newAnimal"></param>
         /// <returns></returns>
-        private bool Duplicate2(string newLine)
+        private bool IsAnimalInFile(Animal a)
         {
             string[] lines = ReadDataLines(_animalsFile);
+            string newLine=$"{a.Species}|{a.Name}|{a.Birthdate.ToLongDateString()}";
+            return lines.Any(line => line == newLine);
 
-            foreach (string line in lines)
-            {
-                if (line == newLine)
-                {
-                    Console.WriteLine("Error: This animal already exists");
-                    return true;
-                }
-            }
-            return false;
+            //foreach (string line in lines)
+            //{
+            //    if (line == newLine)
+            //    {
+            //        Console.WriteLine("Error: This animal already exists");
+            //        return true;
+            //    }
+            //}
+            //return false;
         }
         public bool Duplicate(string type, object obj)
         {
