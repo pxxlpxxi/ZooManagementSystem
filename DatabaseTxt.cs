@@ -76,11 +76,20 @@ namespace ZooManagementSystem
             //_zoo =_dataInit.Zoo;
             _visitors = _dataInit.InitVisitors;
         }
+        /// <summary>
+        /// Method for data initialization. Creates folder and files if not already there,
+        /// adds default data to files if empty,
+        /// reads data files, adds objects to local memory (field lists) if not already there.
+        /// </summary>
         public void Initializer()
         {
             Create();
-            LoadInitData();
+            WriteLocalMemoryToDatabase();
+            LoadDataFromFiles();
         }
+        /// <summary>
+        /// Method for creating data folder and files
+        /// </summary>
         private void Create()
         {
             if (!Directory.Exists(_appFolder))
@@ -98,7 +107,6 @@ namespace ZooManagementSystem
             if (!File.Exists(_enclosuresFile))
             {
                 File.Create(_enclosuresFile).Dispose();
-
             }
             if (!File.Exists(_zookeepersFile))
             {
@@ -110,19 +118,21 @@ namespace ZooManagementSystem
             }
 
         } //end of create files
-        private void LoadInitData()
+        /// <summary>
+        /// Method for adding all animals to 
+        /// </summary>
+        private void WriteLocalMemoryToDatabase()
         {
             foreach (Animal animal in _animals)
             {
-                if (!AnimalIsInFile(animal))
+                if (!AnimalIsInFile(animal)) //if animal not in file already
                 {
                     using (StreamWriter aWriter = new(_animalsFile, true))
                     {
-                        aWriter.WriteLine(AnimalToString(animal));
+                        aWriter.WriteLine(AnimalToString(animal)); //append data string to file
                     }
                 }
             }
-
             foreach (Enclosure enclosure in _enclosures)
             {
                 if (!EnclosureIsInFile(enclosure))
@@ -133,7 +143,6 @@ namespace ZooManagementSystem
                     }
                 }
             }
-
             foreach (Zookeeper zookeeper in _zookeepers)
             {
                 if (!ZookeeperIsInFile(zookeeper))
@@ -144,7 +153,6 @@ namespace ZooManagementSystem
                     }
                 }
             }
-
             foreach (Visitor visitor in _visitors)
             {
                 if (!VisitorIsInFile(visitor))
@@ -156,37 +164,10 @@ namespace ZooManagementSystem
                 }
             }
         }
-        //public void LoadOrInitialize(string filePath)
-        //{
-        //    if(!File.Exists(filePath)) // ||
-        //    {
-        //        //foreach (var initObj in _initData)
-        //        //{
-        //        //    if (initObj is Elephant e)
-        //        //    { AddAnimal(e); }
-        //        //    else if (initObj is Giraffe g)
-        //        //    { AddAnimal(g); }
-        //        //    else if (initObj is Lion l)
-        //        //    { AddAnimal(l); }
-        //        //    else if (initObj is Penguin p)
-        //        //    { AddAnimal(p); }
-        //        //    else if (initObj is Zookeeper z)
-        //        //    { AddZookeeper(z); }
-        //        //    //else if (initObj is Visitor v)
-        //        //    //{ AddVisitor(v); }
-        //        //}
-        //    //}
-        //    //else { string[] lines = ReadDataLines (_)}
-        //}
         private void CreateFile(string filePath)
         {
             File.Create(filePath).Dispose();
         }
-        /// <summary>
-        /// Method for reading all lines in txt db.
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <returns>returns array of lines in .txt file</returns>
         private string[] ReadDataLines(string filePath)
         {
             try
@@ -201,6 +182,11 @@ namespace ZooManagementSystem
                 return Array.Empty<string>(); //return empty array
             }
         }
+        /// <summary>
+        /// Method to convert animal object to string
+        /// </summary>
+        /// <param name="animal"></param>
+        /// <returns>Returns a data string formatted for db standard</returns>
         private string AnimalToString(Animal animal)
         {
             return $"{animal.Species}|{animal.Name}|{animal.Birthdate.ToLongDateString()}";
@@ -208,8 +194,7 @@ namespace ZooManagementSystem
         private string EnclosureToString(Enclosure e)
         {
             string eAnimals = string.Join(",", e.Animals.Select(a => a.Name));
-            //foreach (Animal a in e.Animals)
-            //{ eAnimals += a.Name + ','; }
+
             return $"Enclosure|{e.Name}|{eAnimals}";
         }
         private string ZookeeperToString(Zookeeper z)
@@ -220,84 +205,73 @@ namespace ZooManagementSystem
         {
             return $"Visitor|{v.Name}";
         }
+        private void LoadDataFromFiles()
+        {
+            string[] animals = ReadDataLines(_animalsFile);
+            CreateObjects(animals);
 
+            string[] enclosures= ReadDataLines(_enclosuresFile);
+            CreateObjects(enclosures);
 
+            string[] zookeepers=ReadDataLines(_zookeepersFile);
+            CreateObjects(zookeepers);
+
+            string[] visitors= ReadDataLines(_visitorsFile);
+            CreateObjects(visitors);
+        }
         /// <summary>
         /// Method to add a new animal.
+        /// Adds obj data string to text DB, then adds obj to field list if not already there
         /// </summary>
         /// <param name="newAnimal"></param>
-        public void AddAnimal/*(string name, string species, DateTime birthdate)*/(Animal newAnimal)
+        public void AddAnimal(Animal newAnimal)
         {
             AddToFile(
             newAnimal,
             _animalsFile,
-            a => AnimalToString(newAnimal),//$"{a.Species}|{a.Name}|{a.Birthdate.ToLongDateString()}",
+            a => AnimalToString(newAnimal),
             a => Duplicate("Animal", a)
         );
             _animals.Add(newAnimal);
 
-            //if (!_animals.Any(a => a.Equals(newAnimal)))
-            //{ _animals.Add(newAnimal); }
-
-            //if (Duplicate("Animal", newAnimal))
-            //{
-            //    Console.WriteLine($"{newAnimal.Name} the {newAnimal.Species} has been added.");
-            //}
-            //else { Console.WriteLine($"Could not add {newAnimal} the {newAnimal.Species}. Please try again"); }
+            //check if animal has been added, output if added or not
+            if (Duplicate("Animal", newAnimal))
+            {
+                Console.WriteLine($"{newAnimal.Name} the {newAnimal.Species} has been added.");
+            }
+            else { Console.WriteLine($"Could not add {newAnimal.Name} the {newAnimal.Species} as {newAnimal.Name} already exists."); }
 
         }
-        public void AddZookeeper/*(string name, int age, string enclosureName)*/ (Zookeeper newZookeeper)
+        public void AddZookeeper(Zookeeper newZookeeper)
         {
-            //string title = "Zookeeper";
-            //string[] fields = { title, name, age.ToString(), enclosureName };
-            //string newZookeeperString = $"{title}|{name}|{age.ToString()}|{enclosureName}";
-            //if (!Duplicate2(newZookeeperString))
-            //{
-            //    using (StreamWriter streamWriter = new(_zookeepersFile))
-            //    { Console.WriteLine(newZookeeperString); }
-            //    if (Duplicate2(newZookeeperString))
-            //    {
-            //        CreateObjects(fields);
-            //        Console.WriteLine($"{title} {name} has been added.");
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("Something went wrong. Please try again.");
-            //    }
-
             AddToFile(
             newZookeeper,
             _zookeepersFile,
-            z => ZookeeperToString(newZookeeper),//$"Zookeeper|{z.Name}|{z.Age}|{z.EnclosureName}",
+            z => ZookeeperToString(newZookeeper),
             z => Duplicate("Zookeeper", z)
         );
+            _zookeepers.Add(newZookeeper);
         }
-
         public void AddEnclosure(Enclosure newEnclosure)
         {
-            //string animals = "";
-            //foreach (Animal a in enclosure.Animals)
-            //{
-            //    animals += a.Name + ',';
-            //}
             AddToFile(
                 newEnclosure,
                 _enclosuresFile,
-                e => EnclosureToString(newEnclosure),//, $"Enclosure|{e.Name}|{animals}",
+                e => EnclosureToString(newEnclosure),
                 e => Duplicate("Enclosure", e)
                 );
+            _enclosures.Add(newEnclosure);
         }
         public void AddVisitor(Visitor newVisitor)
         {
             AddToFile(
                 newVisitor,
                 _visitorsFile,
-                v => VisitorToString(newVisitor),//$"Visitor|{v.Name}",
+                v => VisitorToString(newVisitor),
                 v => Duplicate("Visitor", v)
                 );
-
+            _visitors.Add(newVisitor);
         }
-
         private void AddToFile<T>(T obj, string filePath, Func<T, string> objString, Func<T, bool> duplicateChecker)
         {
             if (!File.Exists(filePath))
@@ -315,8 +289,8 @@ namespace ZooManagementSystem
             string line = objString(obj);
             try
             {
-                using StreamWriter streamWriter = new(filePath, true);
-                streamWriter.WriteLine(line);
+                using (StreamWriter streamWriter = new(filePath, true))
+                { streamWriter.WriteLine(line); }
             }
             catch (Exception e)
             {
@@ -324,7 +298,6 @@ namespace ZooManagementSystem
             }
 
         }
-
         /// <summary>
         /// method to check if animal is already in the db file
         /// </summary>
@@ -333,46 +306,50 @@ namespace ZooManagementSystem
         private bool AnimalIsInFile(Animal animal)
         {
             string[] animals = ReadDataLines(_animalsFile);
-            string newLine = AnimalToString(animal);// $"{animal.Species}|{animal.Name}|{animal.Birthdate.ToLongDateString()}";
+            string newLine = AnimalToString(animal);
             return animals.Any(line => line == newLine);
         }
+        /// <summary>
+        /// Method to check if zookeeper is already in DB file
+        /// </summary>
+        /// <param name="zookeeper"></param>
+        /// <returns></returns>
         private bool ZookeeperIsInFile(Zookeeper zookeeper)
         {
             string[] zookeepers = ReadDataLines(_zookeepersFile);
-            string newLine = ZookeeperToString(zookeeper);// $"Zookeeper|{zookeeper.Name}|{zookeeper.Age}|{zookeeper.EnclosureName}";
+            string newLine = ZookeeperToString(zookeeper);
             return zookeepers.Any(line => line == newLine);
         }
+
+        /// <summary>
+        /// Method to check if enclosure is already in db file
+        /// </summary>
+        /// <param name="enclosure"></param>
+        /// <returns></returns>
         private bool EnclosureIsInFile(Enclosure enclosure)
         {
-            //string enclosureAnimals = "";
             string[] enclosures = ReadDataLines(_enclosuresFile);
-            //foreach (Animal animal in enclosure.Animals)
-            //{
-            //    enclosureAnimals += animal.Name + ',';
-            //}
-            string newLine = EnclosureToString(enclosure);//, $"Enclosure|{enclosure.Name}|{enclosureAnimals}";
+            string newLine = EnclosureToString(enclosure);
 
             return enclosures.Any(line => line == newLine);
         }
-
+        /// <summary>
+        /// Method to check if visitor is already in db file
+        /// </summary>
+        /// <param name="visitor"></param>
+        /// <returns></returns>
         private bool VisitorIsInFile(Visitor visitor)
         {
             string[] visitors = ReadDataLines(_visitorsFile);
             string newLine = VisitorToString(visitor);// $"Visitor|{visitor.Name}";
             return visitors.Any(line => line == newLine);
         }
-
-
-        //foreach (string line in lines)
-        //{
-        //    if (line == newLine)
-        //    {
-        //        Console.WriteLine("Error: This animal already exists");
-        //        return true;
-        //    }
-        //}
-        //return false;
-
+        /// <summary>
+        /// Method to check if animal is already in local memory (field list)
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public bool Duplicate(string type, object obj)
         {
             if (_duplicateCheckers.TryGetValue(type, out var checkFunc))
@@ -386,60 +363,6 @@ namespace ZooManagementSystem
                 return false;
             }
         }
-
-        //public bool Duplicate(string type, object obj)//Animal? newAnimal = null, Zookeeper? newZookeeper = null, Enclosure? newEnclosure = null, Visitor? newVisitor = null
-        //{
-        //    switch (type)
-        //    {
-        //        //case "Eleplant":
-        //        //case "Penguin":
-        //        //case "Giraffe":
-        //        //case "Lion":
-        //        case "Animal":
-        //            foreach (Animal animal in _animals)
-        //                if (animal.Equals(obj))
-        //                {//if animal already exists in TxtDB
-        //                    return true;
-        //                }
-        //            break;
-        //        case "Zookeeper":
-        //            foreach (Zookeeper zookeeper in _zookeepers)
-        //                if (zookeeper.Equals(obj))
-        //                {//if animal already exists in TxtDB
-        //                    return true;
-        //                }
-        //            break;
-        //        case "Visitor":
-        //            foreach (Visitor visitor in _visitors)
-        //                if (visitor.Equals(obj))
-        //                {//if animal already exists in TxtDB
-        //                    return true;
-        //                }
-        //            break;
-        //        case "Enclosure":
-        //            foreach (Enclosure enclosure in _enclosures)
-        //                if (enclosure.Equals(obj))
-        //                {//if animal already exists in TxtDB
-        //                    return true;
-        //                }
-        //            break;
-        //    }
-
-        //if (File.Exists(_animalsFile))
-        //{
-        //    List<Animal> animalsInDB = GetAllAnimals();
-        //    foreach (Animal animal in animalsInDB)
-        //    {
-        //        //calling bool override Equals method in Animal
-        //        if (animal.Equals(newAnimal))
-        //        {//if animal already exists in TxtDB
-        //            return true;
-        //        }
-        //    }
-        //}
-        //return false;
-        //}
-
         /// <summary>
         /// REQUIRES that enclosures are already initiated.
         /// Method for setting value of List-fields.
@@ -449,13 +372,7 @@ namespace ZooManagementSystem
         /// <param name="lines">Array of lines of text, each line representing an object, field-values separated by |.</param>
         internal void CreateObjects(string[] lines)
         {
-
-            //_zookeepers.Clear();
-            //_enclosures.Clear();
-            //_animals.Clear();
-            //_visitors.Clear();
-
-            //create local object lists if fields not already set
+            //initialize object lists
             List<Animal> animals = new();
             List<Enclosure> enclosures = new();
             List<Visitor> visitors = new();
@@ -502,29 +419,25 @@ namespace ZooManagementSystem
             _visitors.AddRange(visitors);
             _enclosures.AddRange(enclosures);
 
+            //adds assigned enclosure obj to zookeeper by enlosurename
             foreach (Zookeeper z in _zookeepers)
             {
-
-
                 Enclosure enclosure = _enclosures.FirstOrDefault(e => e.Name == z.EnclosureName);
                 if (enclosure != null)
                 {
-                    z.AssignedEnclosure = enclosure;
+                    z.AssignedEnclosure = enclosure; //if enclosure obj found by name
                 }
                 else
-                {
+                { //manually assign enclosure to zookeeper
                     Console.WriteLine($"Warning: No enclosure found for '{z.Name}'. No enclosure found by name: '{z.EnclosureName}'");
                     bool enclosureFound = false;
                     while (!enclosureFound)
                     {
-
-                        //// fejlhåndtering
-                        //z.AssignedEnclosure = null;
                         Console.WriteLine("\nAvailable enclosures:");
                         _enclosures.ForEach(e => Console.WriteLine(e.Name));
 
-                        //**************************************** UI ERROR HANDLING 
-                        Console.WriteLine($"Please choose an Enclosure for {z.Name}: ");
+                        //**************************************** flyt evt til ui
+                        Console.Write($"Please choose an Enclosure for {z.Name}: ");
                         string input = Console.ReadLine();
 
                         Enclosure chosen = _enclosures.FirstOrDefault(e => e.Name.Equals(input, StringComparison.OrdinalIgnoreCase));
@@ -545,18 +458,5 @@ namespace ZooManagementSystem
 
             }
         }
-        public List<Animal> GetAllAnimals()
-        {
-            return _animals;
-        }
-
-        /// <summary>
-        /// Method for getting value of list with shortform getter (skipping property declaration)
-        /// </summary>
-        /// <returns></returns>
-        //public List<Zookeeper> GetAllZookeepers() => _zookeepers;
-        //public List<Enclosure> GetAllEnclosures() => _enclosures;
-        //public List<Animal> GetAllAnimals() => _animals;
-        //public List<Visitor> GetAllVisitors() => _visitors;
     }
 }
