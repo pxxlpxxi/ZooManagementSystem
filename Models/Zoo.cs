@@ -6,10 +6,10 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace ZooManagementSystem
+namespace ZooManagementSystem.Models
 {
     internal class Zoo
-    {/*Attributter:
+    {/*OPG: Attributter:
 
         name (str): Navnet på zooen
 

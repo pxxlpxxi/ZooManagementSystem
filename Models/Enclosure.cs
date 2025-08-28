@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
 
-namespace ZooManagementSystem
+namespace ZooManagementSystem.Models
 {
     internal class Enclosure
     {
@@ -32,7 +32,7 @@ animals (list): Liste af dyr i buret*/
         /// Constructor for Enclosure, takes one parameter
         /// </summary>
         /// <param name="name"></param>
-        public Enclosure(string name, int? size=null)
+        public Enclosure(string name, int? size = null)
         {
             _name = name;
             _animals = new List<Animal>();
@@ -45,7 +45,7 @@ animals (list): Liste af dyr i buret*/
         public void AddAnimal(Animal animal)
         {
             _animals.Add(animal);
-           // UpdateSize(); //metodekald
+            // UpdateSize(); //metodekald
         }
         /// <summary>
         /// Method for revoming an animal from an enclosure,
@@ -55,7 +55,7 @@ animals (list): Liste af dyr i buret*/
         public void RemoveAnimal(Animal animal)
         {
             _animals.Remove(animal);
-           // UpdateSize();
+            // UpdateSize();
         }
         /// <summary>
         /// Method for updating enclosure size to meet area requirement for the number of animals in enclosure
@@ -64,7 +64,8 @@ animals (list): Liste af dyr i buret*/
         //{
         //    return Animals.Sum(a => a.RequiredArea);
         //}
-        public void PrintSize() {
+        public void PrintSize()
+        {
             Console.WriteLine(_size + "m²");
         }
         /// <summary>
@@ -88,7 +89,7 @@ animals (list): Liste af dyr i buret*/
         public Enclosure DeepCopyEnclosure(Enclosure original)
         {
             Enclosure copy = new Enclosure(original.Name);
-            
+
             foreach (Animal a in original.Animals)
             {
                 Animal newAnimal = a switch

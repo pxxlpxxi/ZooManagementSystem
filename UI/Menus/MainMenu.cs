@@ -4,42 +4,55 @@ using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZooManagementSystem.Database;
+using ZooManagementSystem.Models;
+using ZooManagementSystem.Services;
 
-namespace ZooManagementSystem
+namespace ZooManagementSystem.UI.Menus
 {
     internal class MainMenu
     {
         //private readonly VisitorMenu _visitorMenu;
         private readonly DatabaseTxt _database;
         private readonly ManageZooMenu _manageZooMenu;
-        private readonly AnimalMenu _animalMenu;
         private readonly Zoo _zoo;
         //private readonly ManageZooMenu _manageZooMenu;
         //private readonly DataInit _dataInit;
         //private readonly Database =>_database;
 
 
-        public MainMenu(/*ManageZooMenu manageZooMenu, /*VisitorMenu visitorMenu,*/ Zoo zoo, DatabaseTxt database) //DataInit dataInit)
+        public MainMenu( Zoo zoo, DatabaseTxt database) //DataInit dataInit)/*ManageZooMenu manageZooMenu, /*VisitorMenu visitorMenu,*/
         {
             // _manageZooMenu = manageZooMenu;
             //_visitorMenu = visitorMenu;
             _zoo = zoo;
             _database = database;
             _manageZooMenu = new ManageZooMenu(_zoo, _database);
-            _animalMenu = new AnimalMenu(_zoo,_database);
+            
 
-          //  _dataInit = dataInit;
+            //  _dataInit = dataInit;
         }
         public void Run()
         {
-
-            Console.ReadKey();
             ConsoleKey? input = null;
 
+            /*Hvad er zoo overhovedet? :D Er det et spil eller er det en zoo?
+             Login-funktion her?
+            Hvis spil: 
+            menu: 
+            - Visit (gæstespiller med default-data), ingen db-kontakt.
+            -Login -> ManageZoo
+            Hvis et faktisk management system:
+            - Visit er billet-system, hvor man kan købe billet, og man kan se liste over daglige aktiviteter
+              (eg. hvornår bliver dyr fodret, events etc)
+            - Login: for at se sin billet-booking, årskort, whatever
+                --> hvis admin -> adminpanel: manage zoo*/
+
             string[] menuOptions = {
+                    "" +
                     "[1] Visit Zoo",
                     "[2] Manage Zoo",
-                    //"[3] ",
+                    //"[3] Login", 
                     //"[4] ",
                     "[R] Return to main menu",
                     "[Q] Quit"
@@ -66,7 +79,7 @@ namespace ZooManagementSystem
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
-                        _manageZooMenu.Run(_database, zoo);
+                        _manageZooMenu.Run();
                         break;
                     //case ConsoleKey.D3:
                     //case ConsoleKey.NumPad3:
@@ -88,7 +101,7 @@ namespace ZooManagementSystem
 
                     //    break;
                     //case ConsoleKey.R:
-                        
+
                     //    break;
                     case ConsoleKey.Q:
                         QuitManager.RequestQuit();

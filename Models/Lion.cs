@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZooManagementSystem
+namespace ZooManagementSystem.Models
 {
     enum LionSounds
     {
@@ -34,7 +34,7 @@ namespace ZooManagementSystem
         {
 
         }
-       
+
         public override string GetSound()
         {
             return Sound.ToString();

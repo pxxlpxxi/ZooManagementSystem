@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZooManagementSystem
+namespace ZooManagementSystem.Models
 {
     enum ElephantSounds
     {
@@ -27,7 +27,7 @@ namespace ZooManagementSystem
         public string Sound { get { return _sound; } set { _sound = value; } }
         public string Name { get { return _name; } set { _name = value; } }
         public override int RequiredArea => 1000; //1000 kvadratmeter-krav pr elefant i Enclosure
-        public Elephant(string name, DateTime birthdate) 
+        public Elephant(string name, DateTime birthdate)
             : base(name, species: "Elephant", birthdate)
         {
 

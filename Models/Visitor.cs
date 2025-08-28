@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZooManagementSystem
+namespace ZooManagementSystem.Models
 {
     internal class Visitor
     {
@@ -18,7 +18,7 @@ namespace ZooManagementSystem
         public override bool Equals(object obj)
         {
             if (obj is not Visitor v) { return false; }
-            
+
             return v.Name == Name;
         }
         public override int GetHashCode()

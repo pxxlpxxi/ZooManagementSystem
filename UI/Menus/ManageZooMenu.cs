@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZooManagementSystem.Database;
+using ZooManagementSystem.Models;
+using ZooManagementSystem.Services;
+using ZooManagementSystem.UI;
+using ZooManagementSystem.UI.Menus;
 
-namespace ZooManagementSystem
+namespace ZooManagementSystem.UI.Menus
 {
     internal class ManageZooMenu
     {
@@ -20,21 +25,22 @@ namespace ZooManagementSystem
             //_zooMenu = zooMenu;
             //_zookeeperMenu = zookeeperMenu;
             //_enclosureMenu = enclosureMenu;
-            //_animalMenu = animalMenu;
             _database = database;
             _zoo = zoo;
             //_enclosureMenu= new (database);
         }
         public void Run()
         {
-            AnimalMenu animalMenu = new(_database);
-            EnclosureMenu enclosureMenu = new(_database,_zoo);
+            AnimalMenu animalMenu = new(_zoo, _database);
+            EnclosureMenu enclosureMenu = new(_database, _zoo);
 
             string[] menuOptions = {
+                    "" +
                     "[1] Manage Animals",
                     "[2] Manage Zookeepers",
                     "[3] Manage Enclosures",
                     "[4] Manage Zoo",
+
                     "",
                     "[R] Return to main menu",
                     "[Q] Quit"

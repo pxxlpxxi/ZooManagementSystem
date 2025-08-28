@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace ZooManagementSystem
+namespace ZooManagementSystem.Models
 {
     abstract class Animal
     {
@@ -115,10 +115,10 @@ namespace ZooManagementSystem
             }
 
             //string representation of birthdate formatted as US-english
-            string bday = Birthdate.ToString("MMMM dd yyyy", new CultureInfo("en-US")); 
+            string bday = Birthdate.ToString("MMMM dd yyyy", new CultureInfo("en-US"));
             return (age, bday);
         }
-        
+
         /// <summary>
         /// Override of Equals to specify how two animals are compared to each other
         /// </summary>
@@ -138,7 +138,7 @@ namespace ZooManagementSystem
              add GetType() or other check if such information is needed */
 
             if (obj is not Animal other)
-            { 
+            {
                 return false; //if obj is not an Animal, return false
             }
 

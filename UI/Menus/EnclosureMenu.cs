@@ -4,8 +4,11 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using ZooManagementSystem.Database;
+using ZooManagementSystem.Models;
+using ZooManagementSystem.Services;
 
-namespace ZooManagementSystem
+namespace ZooManagementSystem.UI.Menus
 {
     internal class EnclosureMenu
     {
@@ -21,12 +24,12 @@ namespace ZooManagementSystem
             ConsoleKey? key = null;
             string[] menuOptions =
             {
-
+                "" +
                 "[1] Add Enclosure",
-                //"[2] Delete Animal",
-                //"[2] ",
-                //"[3] ",
-                //"[4] ",
+                //"[2] Delete Animal (from enclosure)",
+                //"[3] Edit Enclosure",
+                //"[4] Delete Enclosure",
+                //"[5] ",
                 "",
                 "[R] Return",
                 "[Q] Quit"

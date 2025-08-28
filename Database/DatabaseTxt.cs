@@ -7,8 +7,9 @@ using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
+using ZooManagementSystem.Models;
 
-namespace ZooManagementSystem
+namespace ZooManagementSystem.Database
 {
     internal class DatabaseTxt
     {
@@ -139,16 +140,16 @@ namespace ZooManagementSystem
         /// </summary>
         private void WriteLocalMemoryToDatabase()
         {
-            foreach (Zoo zoo in _zoos)
-            {
-                if (!ZooIsInFile(zoo))
-                {
-                    using (StreamWriter zooWriter = new(_zooFile, true))
-                    {
-                        zooWriter.WriteLine(ZooToString(zoo));
-                    }
-                }
-            }
+            //foreach (Zoo zoo in _zoos)
+            //{
+            //    if (!ZooIsInFile(zoo))
+            //    {
+            //        using (StreamWriter zooWriter = new(_zooFile, true))
+            //        {
+            //            zooWriter.WriteLine(ZooToString(zoo));
+            //        }
+            //    }
+            //}
             foreach (Animal animal in _animals)
             {
                 if (!AnimalIsInFile(animal)) //if animal not in file already
@@ -236,9 +237,9 @@ namespace ZooManagementSystem
         {
             return $"Zookeeper|{z.Name}|{z.Age}|{z.EnclosureName}";
         }
-        private string ZooToString(Zoo zoo) 
+        private string ZooToString(Zoo zoo)
         {
-            string zEnclosures= string.Join(",", zoo.Enclosures.Select(a => a.Name));
+            string zEnclosures = string.Join(",", zoo.Enclosures.Select(a => a.Name));
             return $"Zoo|{Zoo.Name}|{zEnclosures}";
         }
         private string VisitorToString(Visitor v)
@@ -376,8 +377,9 @@ namespace ZooManagementSystem
 
             return enclosures.Any(line => line == newLine);
         }
-        private bool ZooIsInFile(Zoo zoo) {
-            
+        private bool ZooIsInFile(Zoo zoo)
+        {
+
             string[] zoos = ReadDataLines(_zooFile);
             string newLine = ZooToString(zoo);
             return zoos.Any(line => line == newLine);

@@ -5,10 +5,10 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
-using ZooManagementSystem;
 using ZooManagementSystem.Helpers;
+using ZooManagementSystem.Models;
 
-namespace ZooManagementSystem
+namespace ZooManagementSystem.Database
 {
     internal class DataInit
     {
@@ -78,7 +78,7 @@ namespace ZooManagementSystem
             Enclosure giraffeEnclosure = new("Gentle Giants’ Garden");
             giraffeEnclosure.Animals = new() { melman, lillefod, petri, katla };
 
-            
+
 
             //adding enclosures to internal storage
             _initEnclosures = new()

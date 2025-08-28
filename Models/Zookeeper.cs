@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZooManagementSystem
+namespace ZooManagementSystem.Models
 {
     internal class Zookeeper
     {
@@ -56,8 +56,8 @@ namespace ZooManagementSystem
             }
 
             // if both enclosures are null = equal. if enclosure not null, call equals on assignedEnclosure
-            bool enclosuresEqual = (AssignedEnclosure == null && other.AssignedEnclosure == null) ||
-                                   (AssignedEnclosure != null && AssignedEnclosure.Equals(other.AssignedEnclosure));
+            bool enclosuresEqual = AssignedEnclosure == null && other.AssignedEnclosure == null ||
+                                   AssignedEnclosure != null && AssignedEnclosure.Equals(other.AssignedEnclosure);
 
             return Name == other.Name && Age == other.Age && enclosuresEqual;
         }

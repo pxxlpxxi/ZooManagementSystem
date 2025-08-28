@@ -1,6 +1,11 @@
 ﻿using Microsoft.VisualBasic;
 using System.Security.Permissions;
+using ZooManagementSystem.Core;
+using ZooManagementSystem.Database;
 using ZooManagementSystem.Helpers;
+using ZooManagementSystem.Models;
+using ZooManagementSystem.Services;
+using ZooManagementSystem.UI.Menus;
 
 namespace ZooManagementSystem
 {
@@ -8,25 +13,15 @@ namespace ZooManagementSystem
     {
         static void Main(string[] args)
         {
-            DataInit dataInit = new DataInit();
-            Zoo zoo = new ZooBuilder()
-                .SetName(dataInit.Name)
-                .AddEnclosures(dataInit.InitEnclosures)
-                .AddAnimals(dataInit.InitAnimals)
-                //.AddZookeepers(dataInit.InitVisitors)
-                .Build();
-
-            DatabaseTxt DB = new DatabaseTxt(zoo);
-            MainMenu mainMenu = new(zoo, DB);
-
-            //data initialization
-            DB.Initializer();
+            ZooApp App =new ZooApp();
 
             bool running = true;
             while (running && !QuitManager.QuitRequested)
             {
-                mainMenu.Run();
+                App.Run();
             }
+
+
 
 
             ///* ***************** TEST SECTION ****************************** */
@@ -177,6 +172,7 @@ namespace ZooManagementSystem
             //    ani.Age();
             //});
             //Console.ReadKey();
+
         }
     }
 }

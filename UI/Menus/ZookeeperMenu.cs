@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZooManagementSystem
+namespace ZooManagementSystem.UI.Menus
 {
-    internal class ZooMenu
+    internal class ZookeeperMenu
     {
+        /*Add Zookeeper, Edit Zookeeper, Delete Zookeper*/
     }
 }

@@ -3,16 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZooManagementSystem.Database;
+using ZooManagementSystem.Models;
+using ZooManagementSystem.Services;
 
-namespace ZooManagementSystem
+namespace ZooManagementSystem.UI.Menus
 {
     internal class AnimalMenu
     {
+        //private readonly
         private readonly Zoo _zoo;
+        //private readonly 
         private readonly DatabaseTxt _database;
+        public DatabaseTxt database=>_database;
+        public Zoo Zoo => _zoo;
+
+
         public AnimalMenu(Zoo zoo, DatabaseTxt database)
         {
-            _zoo=zoo;
+            _zoo = zoo;
             _database = database;
         }
 
@@ -24,9 +33,9 @@ namespace ZooManagementSystem
 
                 "[1] Add Animal",
                 //"[2] Delete Animal",
-                //"[2] ",
-                //"[3] ",
-                //"[4] ",
+                //"[3] Relocate Animal (to different enclosure)",
+                //"[4] Edit Animal",
+                //"[5] ",
                 "",
                 "[R] Return",
                 "[Q] Quit"
