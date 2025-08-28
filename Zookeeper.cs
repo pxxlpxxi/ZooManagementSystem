@@ -49,9 +49,24 @@ namespace ZooManagementSystem
         }
         public override bool Equals(object obj)
         {
-            Zookeeper z = obj as Zookeeper;
-            return z.Name == this.Name && z.Age == this.Age && z.AssignedEnclosure.Equals(this.AssignedEnclosure);
+            //see explanation of if statement in Animal
+            if (obj is not Zookeeper other)
+            {
+                return false;
+            }
+
+            // if both enclosures are null = equal. if enclosure not null, call equals on assignedEnclosure
+            bool enclosuresEqual = (AssignedEnclosure == null && other.AssignedEnclosure == null) ||
+                                   (AssignedEnclosure != null && AssignedEnclosure.Equals(other.AssignedEnclosure));
+
+            return Name == other.Name && Age == other.Age && enclosuresEqual;
         }
+
+        //public override bool Equals(object obj)
+        //{
+        //    Zookeeper z = obj as Zookeeper;
+        //    return z.Name == this.Name && z.Age == this.Age && z.AssignedEnclosure.Equals(this.AssignedEnclosure);
+        //}
         public override int GetHashCode()
         {
             return HashCode.Combine(Name, Age, AssignedEnclosure);

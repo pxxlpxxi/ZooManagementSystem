@@ -45,60 +45,102 @@ namespace ZooManagementSystem
             Console.WriteLine(sound);
         }
         public abstract string GetSound();
-
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual void MakeRandomSound()
         {
             string randomSound = $"{Name} the {Species} says: {GetRandomSound().ToString()}";
 
             Console.WriteLine(randomSound);
         }
-        public string GetRandomEnumValueAsString(Type enumType)
+        /// <summary>
+        /// Method for selecting an animals sound at random.
+        /// </summary>
+        /// <param name="enumType"></param>
+        /// <returns>Returns random sound from the subtypes enum sounds</returns>
+        protected string GetRandomEnumValueAsString(Type enumType)
         {
-            Array values = Enum.GetValues(enumType);
-            int index = random.Next(values.Length);
+            Array values = Enum.GetValues(enumType); //gets values in subtypes enum sounds
+            int index = random.Next(values.Length); //
             return values.GetValue(index).ToString();
         }
-        //public abstract string GetRandomSound();
+        /// <summary>
+        /// Abstract method for getting and returning a random sound from enum, overridden in subclasses.
+        /// </summary>
+        /// <returns></returns>
         public abstract string GetRandomSound();
+        /// <summary>
+        /// Method for printing that the animal is eating.
+        /// </summary>
+        /// <returns></returns>
         public virtual string Eat()
         {
             return $"{Name} is eating.";
         }
+        /// <summary>
+        /// Method for printing that the animal is asleep.
+        /// </summary>
+        /// <returns></returns>
         public virtual string Sleep()
         {
             return $"Schhh, the {Species} is sleeping." +
                 $"\n{Name} says: ZzzZZzZzzzz .... zzZzZzzzZzz ...";
         }
+
+        /// <summary>
+        /// Method for printing birthday and age. Calls metod for calculating age and formatting birthday string for US-english.
+        /// </summary>
         public virtual void Age()
         {
-            Console.WriteLine($"{Name} is {GetAge().age} years old.\nThe {Species} was born on {GetAge().born}.");
+            var ageAndBday = GetAge();
+            Console.WriteLine($"{Name} is {ageAndBday.age} years old.\nThe {Species} was born on {ageAndBday.birthday}.");
         }
-        public virtual (int age, string born) GetAge()
+        /// <summary>
+        /// Method for calculating age based on birthdate
+        /// </summary>
+        /// <returns>Returns age and string representation of birthdate, formatted for US-english </returns>
+        public virtual (int age, string birthday) GetAge()
         {
             DateTime today = DateTime.Now;
-            int age = today.Year - Birthdate.Year;
+            int age = today.Year - Birthdate.Year; //how many years has it been since year of birth
 
-            //if value of today is smaller than birthdate+age
+            //if value of today is smaller than birthdate+age (date of this years birthday)
             //aka. if thís years birthdate hasnt passed yet
             if (today < _birthdate.AddYears(age))
             {
-                //subtract one year from age
+                //subtract one year from age,
+                //meaning: it's not your birthday until it's actually your birthday :)
                 age--;
             }
 
-            string bday = Birthdate.ToString("MMMM dd yyyy", new CultureInfo("en-US"));
+            //string representation of birthdate formatted as US-english
+            string bday = Birthdate.ToString("MMMM dd yyyy", new CultureInfo("en-US")); 
             return (age, bday);
         }
-        //public override bool Equals(object obj)
-        //{
-
-        //    Animal a = obj as Animal;
-        //    return a.Name == this.Name && a.Species == this.Species && a.Birthdate.Equals(this.Birthdate);
-        //}
+        
+        /// <summary>
+        /// Override of Equals to specify how two animals are compared to each other
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
+            /*typechecking & typecastning obj as Animal (or subtype).
+             
+             if obj is an animal, it is placed into a new variable named other.
+
+             further null-checking and manual typecasting is unnecessary,
+             as it was already done in this process.
+
+             subtype specific information other than species has no relevance here
+             but would be lost if not explicitly checked after typecasting as animal.
+             add GetType() or other check if such information is needed */
+
             if (obj is not Animal other)
-                return false;
+            { 
+                return false; //if obj is not an Animal, return false
+            }
 
             return Name == other.Name &&
                    Species == other.Species &&
@@ -108,14 +150,5 @@ namespace ZooManagementSystem
         {
             return HashCode.Combine(Name, Species, Birthdate);
         }
-
-        //public string GetRandomEnumValue<T>() where T : Enum
-        //{
-        //    Array sounds = Enum.GetValues(typeof(T));
-        //    int index = _random.Next(sounds.Length);
-        //    return sounds.GetValue(index).ToString();
-        //}
-
-
     }
 }

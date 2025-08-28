@@ -30,7 +30,6 @@ namespace ZooManagementSystem
         public string Name { get { return _name; } set { _name = value; } }
         public override int RequiredArea => 300;
 
-
         public Lion(string name, DateTime birthdate) : base(name, species: "Lion", birthdate)
         {
 

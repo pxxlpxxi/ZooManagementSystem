@@ -23,15 +23,16 @@ namespace ZooManagementSystem
         private List<Enclosure> _enclosures;
         private List<Animal> _animals;
         private List<Visitor> _visitors;
-        //private List<Zoo> _zoos;
+        private List<Zoo> _zoos;
+        private Zoo _zoo;
 
         //properties: shortform getters
         public List<Zookeeper> Zookeepers => _zookeepers;
         public List<Enclosure> Enclosures => _enclosures;
         public List<Animal> Animals => _animals;
         public List<Visitor> Visitors => _visitors;
-
-        // public List<Zoo> Zoos => _zoos;
+        public List<Zoo> Zoos => _zoos;
+        public Zoo Zoo => _zoo;
 
         //dictionary for mapping types/classes and subclasses to function(takes string, returns object)
         private readonly Dictionary<string, Func<string[], object>> _factoryDictionary;
@@ -44,8 +45,15 @@ namespace ZooManagementSystem
         /// constructor, initialiserer ny instans af klassen. <br></br>
         /// sætter _factoryDictionary op, mapper typer til constructors 
         /// </summary>
-        public DatabaseTxt()
+        public DatabaseTxt(Zoo zoo)
         {
+            _zoo = zoo;
+
+            _animals = zoo.Animals;
+            _enclosures = zoo.Enclosures;
+            _zookeepers = zoo.Zookeepers;
+            _visitors = zoo.Visitors;
+
             //keystring specifying into which class' constructor to insert data
             _factoryDictionary = new Dictionary<string, Func<string[], object>>()
             {
@@ -61,20 +69,28 @@ namespace ZooManagementSystem
             //specifies where to check if new object already exists based on key (string-representation of entity type)
             _duplicateCheckers = new Dictionary<string, Func<object, bool>>
             {
-                { "Animal", obj => _animals.Any(a => a.Equals(obj)) },
-                { "Zookeeper", obj => _zookeepers.Any(z => z.Equals(obj)) },
-                { "Visitor", obj => _visitors.Any(v => v.Equals(obj)) },
-                { "Enclosure", obj => _enclosures.Any(e => e.Equals(obj)) }
+                 { "Animal", obj => AnimalIsInFile(obj as Animal) },
+                { "Enclosure", obj => EnclosureIsInFile(obj as Enclosure) },
+                 { "Zookeeper", obj => ZookeeperIsInFile(obj as Zookeeper) },
+                 {"Visitor", obj => VisitorIsInFile(obj as Visitor) },
+
+                 /*// note to self: if performance impact of file checks in stead of internal memory is too great, 
+                  //uncomment this section and use instead
+                 //{ "Animal", obj => _animals.Any(a => a.Equals(obj)) },
+                 //{ "Zookeeper", obj => _zookeepers.Any(z => z.Equals(obj)) },
+                 //{ "Visitor", obj => _visitors.Any(v => v.Equals(obj)) },
+                 //{ "Enclosure", obj => _enclosures.Any(e => e.Equals(obj)) }*/
             };
 
-            DataInit _dataInit = new DataInit();
+            //DataInit _dataInit = new DataInit();
 
             //adds default objects to field-lists
-            _animals = _dataInit.InitAnimals;
-            _enclosures = _dataInit.InitEnclosures;
-            _zookeepers = _dataInit.InitZookeepers;
-            //_zoo =_dataInit.Zoo;
-            _visitors = _dataInit.InitVisitors;
+            //_animals = _dataInit.InitAnimals;
+            //_enclosures = _dataInit.InitEnclosures;
+            //_zookeepers = _dataInit.InitZookeepers;
+            //_zoos = _dataInit.InitZoos;
+            //_zoo= zoo;
+            //_visitors = _dataInit.InitVisitors;
         }
         /// <summary>
         /// Method for data initialization. Creates folder and files if not already there,
@@ -119,10 +135,20 @@ namespace ZooManagementSystem
 
         } //end of create files
         /// <summary>
-        /// Method for adding all animals to 
+        /// Method for adding all data to file
         /// </summary>
         private void WriteLocalMemoryToDatabase()
         {
+            foreach (Zoo zoo in _zoos)
+            {
+                if (!ZooIsInFile(zoo))
+                {
+                    using (StreamWriter zooWriter = new(_zooFile, true))
+                    {
+                        zooWriter.WriteLine(ZooToString(zoo));
+                    }
+                }
+            }
             foreach (Animal animal in _animals)
             {
                 if (!AnimalIsInFile(animal)) //if animal not in file already
@@ -164,10 +190,19 @@ namespace ZooManagementSystem
                 }
             }
         }
+        /// <summary>
+        /// Method for creating a new file
+        /// </summary>
+        /// <param name="filePath"></param>
         private void CreateFile(string filePath)
         {
             File.Create(filePath).Dispose();
         }
+        /// <summary>
+        /// Method for reading all lines in a file and adding them to an array
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         private string[] ReadDataLines(string filePath)
         {
             try
@@ -201,6 +236,11 @@ namespace ZooManagementSystem
         {
             return $"Zookeeper|{z.Name}|{z.Age}|{z.EnclosureName}";
         }
+        private string ZooToString(Zoo zoo) 
+        {
+            string zEnclosures= string.Join(",", zoo.Enclosures.Select(a => a.Name));
+            return $"Zoo|{Zoo.Name}|{zEnclosures}";
+        }
         private string VisitorToString(Visitor v)
         {
             return $"Visitor|{v.Name}";
@@ -210,13 +250,13 @@ namespace ZooManagementSystem
             string[] animals = ReadDataLines(_animalsFile);
             CreateObjects(animals);
 
-            string[] enclosures= ReadDataLines(_enclosuresFile);
+            string[] enclosures = ReadDataLines(_enclosuresFile);
             CreateObjects(enclosures);
 
-            string[] zookeepers=ReadDataLines(_zookeepersFile);
+            string[] zookeepers = ReadDataLines(_zookeepersFile);
             CreateObjects(zookeepers);
 
-            string[] visitors= ReadDataLines(_visitorsFile);
+            string[] visitors = ReadDataLines(_visitorsFile);
             CreateObjects(visitors);
         }
         /// <summary>
@@ -232,7 +272,8 @@ namespace ZooManagementSystem
             a => AnimalToString(newAnimal),
             a => Duplicate("Animal", a)
         );
-            _animals.Add(newAnimal);
+            if (!_animals.Any(a => a.Equals(newAnimal)))
+            { _animals.Add(newAnimal); }
 
             //check if animal has been added, output if added or not
             if (Duplicate("Animal", newAnimal))
@@ -323,6 +364,8 @@ namespace ZooManagementSystem
 
         /// <summary>
         /// Method to check if enclosure is already in db file
+        /// by compating string representation of enclosure to the
+        /// ones in db file
         /// </summary>
         /// <param name="enclosure"></param>
         /// <returns></returns>
@@ -332,6 +375,12 @@ namespace ZooManagementSystem
             string newLine = EnclosureToString(enclosure);
 
             return enclosures.Any(line => line == newLine);
+        }
+        private bool ZooIsInFile(Zoo zoo) {
+            
+            string[] zoos = ReadDataLines(_zooFile);
+            string newLine = ZooToString(zoo);
+            return zoos.Any(line => line == newLine);
         }
         /// <summary>
         /// Method to check if visitor is already in db file
@@ -413,11 +462,16 @@ namespace ZooManagementSystem
                     Console.WriteLine($"Unknown type: {key} i linje: {line}");
                 }
             }
-            //if field list empty set field, else add new obj to field list, 
-            _animals.AddRange(animals);
-            _zookeepers.AddRange(zookeepers);
-            _visitors.AddRange(visitors);
-            _enclosures.AddRange(enclosures);
+            //if field list empty set field, else add new objs to field list if objs don't already exist in list, 
+            _animals.AddRange(animals.Where(newAnimal => !_animals.Any(a => a.Equals(newAnimal))));
+            _enclosures.AddRange(enclosures.Where(newEnclosure => !_enclosures.Any(e => e.Equals(newEnclosure))));
+            _zookeepers.AddRange(zookeepers.Where(newZookeeper => !_zookeepers.Any(z => z.Equals(newZookeeper))));
+            _visitors.AddRange(visitors.Where(newVisitor => !_visitors.Any(v => v.Equals(newVisitor))));
+
+            //_animals.AddRange(animals);
+            //_zookeepers.AddRange(zookeepers);
+            //_visitors.AddRange(visitors);
+            //_enclosures.AddRange(enclosures);
 
             //adds assigned enclosure obj to zookeeper by enlosurename
             foreach (Zookeeper z in _zookeepers)

@@ -17,8 +17,9 @@ namespace ZooManagementSystem
         }
         public override bool Equals(object obj)
         {
-            Visitor v = obj as Visitor;
-            return v.Name == this.Name;
+            if (obj is not Visitor v) { return false; }
+            
+            return v.Name == Name;
         }
         public override int GetHashCode()
         {

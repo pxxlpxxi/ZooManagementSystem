@@ -9,31 +9,35 @@ namespace ZooManagementSystem
     internal class ManageZooMenu
     {
         private readonly DatabaseTxt _database;
+        private readonly Zoo _zoo;
+        // private readonly 
+        //private readonly EnclosureMenu _enclosureMenu;
+        //private readonly ZookeeperMenu _zookeeperMenu;
+        //private readonly ZooMenu _zooMenu;
 
-       // private readonly 
-        private readonly EnclosureMenu _enclosureMenu=new();
-        private readonly ZookeeperMenu _zookeeperMenu = new();
-        private readonly ZooMenu _zooMenu = new();
-
-        public ManageZooMenu(DatabaseTxt database)//, ZooMenu zooMenu, EnclosureMenu enclosureMenu, ZookeeperMenu zookeeperMenu, AnimalMenu animalMenu)
+        public ManageZooMenu(Zoo zoo, DatabaseTxt database)//, ZooMenu zooMenu, EnclosureMenu enclosureMenu, ZookeeperMenu zookeeperMenu, AnimalMenu animalMenu)
         {
             //_zooMenu = zooMenu;
             //_zookeeperMenu = zookeeperMenu;
             //_enclosureMenu = enclosureMenu;
             //_animalMenu = animalMenu;
             _database = database;
+            _zoo = zoo;
+            //_enclosureMenu= new (database);
         }
-
-
         public void Run()
         {
-            AnimalMenu _animalMenu = new(_database);
+            AnimalMenu animalMenu = new(_database);
+            EnclosureMenu enclosureMenu = new(_database,_zoo);
+
             string[] menuOptions = {
                     "[1] Manage Animals",
                     "[2] Manage Zookeepers",
                     "[3] Manage Enclosures",
                     "[4] Manage Zoo",
-                    "[Q] Return to main menu",
+                    "",
+                    "[R] Return to main menu",
+                    "[Q] Quit"
                  };
 
 
@@ -41,12 +45,12 @@ namespace ZooManagementSystem
             while (running && !QuitManager.QuitRequested)
             {
                 Console.Clear();
-                Console.WriteLine("Zoo Manager");
+                Console.WriteLine("Zoo Manager\n");
                 foreach (var item in menuOptions)
                 {
                     Console.WriteLine(item);
                 }
-                Console.WriteLine("Selection: ");
+                Console.Write("\nSelection: ");
 
 
                 ConsoleKey key = Console.ReadKey().Key;
@@ -55,15 +59,17 @@ namespace ZooManagementSystem
                 {
                     case ConsoleKey.D1:
                     case ConsoleKey.NumPad1:
-                        _animalMenu.Run();
+                        animalMenu.Run();
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
+                        Console.WriteLine("\nNot yet implemented.");
+                        Console.ReadKey();
                         //_zookeeperMenu.Run();
                         break;
                     case ConsoleKey.D3:
                     case ConsoleKey.NumPad3:
-                        //_enclosureMenu.Run();
+                        enclosureMenu.Run();
                         break;
                     case ConsoleKey.D4:
                     case ConsoleKey.NumPad4:

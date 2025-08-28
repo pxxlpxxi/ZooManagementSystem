@@ -11,24 +11,29 @@ namespace ZooManagementSystem
     {
         //private readonly VisitorMenu _visitorMenu;
         private readonly DatabaseTxt _database;
-        ManageZooMenu _manageZooMenu;
+        private readonly ManageZooMenu _manageZooMenu;
+        private readonly AnimalMenu _animalMenu;
+        private readonly Zoo _zoo;
+        //private readonly ManageZooMenu _manageZooMenu;
         //private readonly DataInit _dataInit;
         //private readonly Database =>_database;
 
 
-        public MainMenu(/*ManageZooMenu manageZooMenu, /*VisitorMenu visitorMenu,*/ DatabaseTxt database) //DataInit dataInit)
+        public MainMenu(/*ManageZooMenu manageZooMenu, /*VisitorMenu visitorMenu,*/ Zoo zoo, DatabaseTxt database) //DataInit dataInit)
         {
             // _manageZooMenu = manageZooMenu;
             //_visitorMenu = visitorMenu;
-            _database = new();
-            _manageZooMenu = new ManageZooMenu(_database);
+            _zoo = zoo;
+            _database = database;
+            _manageZooMenu = new ManageZooMenu(_zoo, _database);
+            _animalMenu = new AnimalMenu(_zoo,_database);
+
           //  _dataInit = dataInit;
         }
         public void Run()
         {
+
             Console.ReadKey();
-            DatabaseTxt Database = _database;
-            ManageZooMenu Manager = new(Database);
             ConsoleKey? input = null;
 
             string[] menuOptions = {
@@ -36,6 +41,7 @@ namespace ZooManagementSystem
                     "[2] Manage Zoo",
                     //"[3] ",
                     //"[4] ",
+                    "[R] Return to main menu",
                     "[Q] Quit"
                  };
             bool running = true;
@@ -43,11 +49,12 @@ namespace ZooManagementSystem
             {
 
                 Console.Clear();
+                Console.WriteLine($"Zoo Management System - {_zoo.Name}\n");
                 foreach (string option in menuOptions)
                 {
                     Console.WriteLine(option);
                 }
-                Console.WriteLine("Selection: ");
+                Console.Write("\nSelection: ");
                 input = QuitManager.WaitForKeyOrQuit();
 
                 //switch case
@@ -59,7 +66,7 @@ namespace ZooManagementSystem
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
-                        _manageZooMenu.Run();
+                        _manageZooMenu.Run(_database, zoo);
                         break;
                     //case ConsoleKey.D3:
                     //case ConsoleKey.NumPad3:
@@ -79,6 +86,9 @@ namespace ZooManagementSystem
                     //case ConsoleKey.D7:
                     //case ConsoleKey.NumPad7:
 
+                    //    break;
+                    //case ConsoleKey.R:
+                        
                     //    break;
                     case ConsoleKey.Q:
                         QuitManager.RequestQuit();

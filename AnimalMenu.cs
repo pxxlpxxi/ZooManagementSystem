@@ -8,9 +8,11 @@ namespace ZooManagementSystem
 {
     internal class AnimalMenu
     {
+        private readonly Zoo _zoo;
         private readonly DatabaseTxt _database;
-        public AnimalMenu(DatabaseTxt database)
+        public AnimalMenu(Zoo zoo, DatabaseTxt database)
         {
+            _zoo=zoo;
             _database = database;
         }
 
@@ -21,6 +23,7 @@ namespace ZooManagementSystem
             {
 
                 "[1] Add Animal",
+                //"[2] Delete Animal",
                 //"[2] ",
                 //"[3] ",
                 //"[4] ",
@@ -98,8 +101,7 @@ namespace ZooManagementSystem
                         (string name, DateTime birthdate) values = AddAnimalPrompt(species);
                         Elephant e = new(values.name, values.birthdate);
                         _database.AddAnimal(e);
-
-                        Console.WriteLine();
+                        Console.ReadKey();
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
@@ -107,7 +109,7 @@ namespace ZooManagementSystem
                         values = AddAnimalPrompt(species);
                         Giraffe g = new(values.name, values.birthdate);
                         _database.AddAnimal(g);
-
+                        Console.ReadKey();
                         break;
                     case ConsoleKey.D3:
                     case ConsoleKey.NumPad3:
@@ -115,7 +117,7 @@ namespace ZooManagementSystem
                         values = AddAnimalPrompt(species);
                         Lion l = new(values.name, values.birthdate);
                         _database.AddAnimal(l);
-
+                        Console.ReadKey();
                         break;
                     case ConsoleKey.D4:
                     case ConsoleKey.NumPad4:
@@ -123,7 +125,7 @@ namespace ZooManagementSystem
                         values = AddAnimalPrompt(species);
                         Penguin p = new(values.name, values.birthdate);
                         _database.AddAnimal(p);
-
+                        Console.ReadKey();
                         break;
                     case ConsoleKey.R:
                         running = false;
@@ -147,7 +149,7 @@ namespace ZooManagementSystem
 
             while (!valid)
             {
-                Console.Write("              [YYYY, MM, DD]\n" +
+                Console.Write("              [YYYY,MM,DD]\n" +
                     "Date of birth: ");
 
                 string bday = Console.ReadLine();
